@@ -17,6 +17,7 @@
 * [解读新一代 Web 性能体验和质量指标](https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651236933&idx=1&sn=81b9a6b2e4ae6073d1c9235cecf2626c&chksm=bd4973c18a3efad73cebabc6d11159783887738ad27b532c3e1ebfbc15aba426803efb2e9e51&scene=21#wechat_redirect)
 * [研发效能提升最佳实践的探索](http://www.uml.org.cn/rdmana/202203161.asp)
 * [前端团队研发效能提升的探索与实践](https://blog.csdn.net/ch834301/article/details/114301753)
+* [研发效能提升最佳实践的探索](https://zhuanlan.zhihu.com/p/202972178?utm_source=ZHShareTargetIDMore)
 
 ## 微前端
 * [爱番番微前端框架落地实践](https://xie.infoq.cn/article/7dd674911efae889bef4115f8)
