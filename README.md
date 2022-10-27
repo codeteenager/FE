@@ -19,6 +19,7 @@
 * [前端团队研发效能提升的探索与实践](https://blog.csdn.net/ch834301/article/details/114301753)
 * [研发效能提升最佳实践的探索](https://zhuanlan.zhihu.com/p/202972178?utm_source=ZHShareTargetIDMore)
 * [如何用研发效能搞垮一个团队](https://www.cnblogs.com/codingdevops/p/15356842.html)
+* [迈出工程开放的第一步，DEF工程微平台体系升级之路](https://www.bilibili.com/read/cv13815458/)
 
 ## 微前端
 * [爱番番微前端框架落地实践](https://xie.infoq.cn/article/7dd674911efae889bef4115f8)
