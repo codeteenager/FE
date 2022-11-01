@@ -20,6 +20,7 @@
 * [研发效能提升最佳实践的探索](https://zhuanlan.zhihu.com/p/202972178?utm_source=ZHShareTargetIDMore)
 * [如何用研发效能搞垮一个团队](https://www.cnblogs.com/codingdevops/p/15356842.html)
 * [迈出工程开放的第一步，DEF工程微平台体系升级之路](https://www.bilibili.com/read/cv13815458/)
+* [58金融前端脚手架的设计与实现](https://zhuanlan.zhihu.com/p/311818609)
 
 ## 源码解析
 * [Node.js源码剖析](https://theanarkh.github.io/understand-nodejs/) 
