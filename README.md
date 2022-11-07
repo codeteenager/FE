@@ -21,6 +21,7 @@
 * [如何用研发效能搞垮一个团队](https://www.cnblogs.com/codingdevops/p/15356842.html)
 * [迈出工程开放的第一步，DEF工程微平台体系升级之路](https://www.bilibili.com/read/cv13815458/)
 * [58金融前端脚手架的设计与实现](https://zhuanlan.zhihu.com/p/311818609)
+* [if我是前端Leader，谈谈前端框架体系建设](https://bobi.ink/2019/12/06/fe-framework/)
 
 ## 源码解析
 * [Node.js源码剖析](https://theanarkh.github.io/understand-nodejs/) 
