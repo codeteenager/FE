@@ -1,10 +1,10 @@
 name: GitHub Pages
 
-# 在master分支发生push事件时触发。
+# 在main分支发生push事件时触发。
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 env: # 设置环境变量
