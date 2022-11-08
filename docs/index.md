@@ -1,28 +1,28 @@
 ---
 layout: home
  
-title: 前端面试题
-titleTemplate: 前端面试题宝典
+title: 前端技术
+titleTemplate: 前端技术
  
 hero:
-  name: 前端面试题
-  text: 八股文
-  tagline: 全面搜集
+  name: 前端技术
+  text: 学习记录
+  tagline: 卷起来
   image:
-    src: /interview-logo.webp
-    alt: interview
+    src: /hero.webp
+    alt: web
   actions:
     - theme: brand
       text: 开始
-      link: /js/
+      link: /web/
  
 features:
   - icon: 💡
-    title: 持续更新
-    details: 常见前端面试题整理。。。
+    title: 前端三大件
+    details: HTML+CSS+JAVASCRIPT
   - icon: 📦
-    title: 扫清盲区
-    details: 系统化深入知识点，构建知识体系
+    title: 前端框架
+    details: Vue、React
   - icon: 🛠️
-    title: 复习稳固
-    details: 多复习知识点，巩固基础知识内容。
+    title: 前端工程化
+    details: 脚手架

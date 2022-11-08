@@ -1,21 +1,21 @@
 module.exports = {
-    title: '前端面试八股文',
-    description: '前端面试八股文',
-    base: '/interview/',
+    title: '前端技术',
+    description: '前端技术',
+    base: '/FE/',
     themeConfig: {
         // siteTitle: false,
         // logo: "/logo.svg",
         nav: [
             {
-                text: '前端面试题',
-                link: "/web/algorithm"
+                text: '首页',
+                link: "/web/index"
             }
         ],
         footer: {
             message: 'Released under the MIT License.',
             copyright: 'Copyright © 2022-present Codeteenager'
         },
-        socialLinks: [{ icon: "github", link: "https://github.com/codeteenager/interview" }],
+        socialLinks: [{ icon: "github", link: "https://github.com/codeteenager/FE" }],
         sidebar: {
             "/web/": [
 
@@ -23,20 +23,24 @@ module.exports = {
                     text: "基础",
                     items: [
                         {
-                            text: "数据结构与算法",
-                            link: "/web/algorithm",
+                            text: "介绍",
+                            link: "/web/index",
                         },
                         {
-                            text: "手写题",
-                            link: "/web/program",
+                            text: "技术博文",
+                            link: "/web/blog",
                         },
                         {
-                            text: "其他面经",
-                            link: "/web/other",
+                            text: "技术分享",
+                            link: "/web/share",
                         }
                     ],
                 }
             ],
         }
+    },
+    docFooter: {
+        prev: '上一页',
+        next: '下一页'
     }
 }

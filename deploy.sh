@@ -13,6 +13,6 @@ git init
 git add -A
 git commit -m 'update docs'
 
-git push -f git@github.com:codeteenager/interview.git main:gh-pages
+git push -f git@github.com:codeteenager/FE.git main:gh-pages
 
 cd -
