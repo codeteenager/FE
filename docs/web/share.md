@@ -9,6 +9,8 @@
 * [小红书-社区前端工程师](/FE/pdf/小红书-社区前端工程师.pdf)
 * [JavaScript的困境与挑战](/FE/pdf/JavaScript的困境与挑战.pdf)
 * [VueSSR性能优化实践](/FE/pdf/VueSSR性能优化实践.pdf)
+* [如何用babel做静态分析和代码转换](/FE/pdf/如何用babel做静态分析和代码转换.pdf)
+* [⼀种秒级安装npm的⽅式](/FE/pdf/⼀种秒级安装npm的⽅式.pdf)
 
 ## 基础设施建设
 * [错误监控天眼](/FE/pdf/错误监控天眼.pdf)
@@ -45,6 +47,9 @@
 * [AI结合前端工程化实现智能开发提效方案](/FE/pdf/AI结合前端工程化实现智能开发提效方案.pdf)
 * [Modern.js的模块工程化实践](/FE/pdf/Modern.js的模块工程化实践.pdf)
 * [VUE组件库建设实践](/FE/pdf/VUE组件库建设实践.pdf)
+* [Umi4设计思路](/FE/pdf/Umi4设计思路.pdf)
+* [前端轻研发实践](/FE/pdf/前端轻研发实践.pdf)
+* [蚂蚁前后端联调的一些实践](/FE/pdf/蚂蚁前后端联调的一些实践.pdf)
 
 ## 研发效能
 * [比心大前端研发效能体系](/FE/pdf/比心大前端研发效能体系.pdf)
