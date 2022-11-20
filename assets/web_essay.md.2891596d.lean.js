@@ -1,0 +1,1 @@
+import{_ as e,c as r,o as t,a}from"./app.202e654b.js";const j=JSON.parse('{"title":"\u524D\u7AEF\u6742\u6587","description":"","frontmatter":{},"headers":[],"relativePath":"web/essay.md","lastUpdated":1668942545000}'),n={name:"web/essay.md"},l=a("",2),s=[l];function i(o,_,h,c,p,f){return t(),r("div",null,s)}const u=e(n,[["render",i]]);export{j as __pageData,u as default};
