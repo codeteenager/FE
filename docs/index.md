@@ -14,15 +14,15 @@ hero:
   actions:
     - theme: brand
       text: 开始
-      link: /web/
+      link: /web/index
  
 features:
   - icon: 💡
     title: 前端三大件
-    details: HTML+CSS+JAVASCRIPT
+    details: HTML+CSS+JavaScript
   - icon: 📦
     title: 前端框架
     details: Vue、React
   - icon: 🛠️
     title: 前端工程化
-    details: 脚手架
+    details: 规范化、模块化、组件化、自动化

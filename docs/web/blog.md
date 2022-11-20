@@ -1,5 +1,11 @@
 # 技术博文
 
+* [Worktile 前端工程化之路](https://xie.infoq.cn/article/4f9190024b86a1e6f30ce0e78)
+* [型项目前端架构浅谈（8000字原创）](https://juejin.cn/post/6844903853859536903)
+* [if 我是前端团队 Leader，怎么制定前端协作规范?](https://juejin.cn/post/6844903897610321934)
+
+## 技术团队
+
 * [凹凸实验室](https://aotu.io/)
 * [奇舞团](https://75.team/)
 * [百度FEX](http://fex.baidu.com/)
@@ -28,3 +34,4 @@
 * [字节前端](https://www.zhihu.com/org/zi-jie-qian-duan/posts)
 * [字节跳动大力教育前端团队](https://juejin.cn/team/6954914058332176397/posts)
 * [政采云前端团队](https://juejin.cn/user/3456520257288974/posts)
+* [PingCode研发中心](https://www.infoq.cn/profile/B31194CBCA0635/publish)
