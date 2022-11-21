@@ -1,8 +1,19 @@
 # webpack
+webpack于2012年3月10号诞生，作者是Tobias(德国)。参考GWT(Google Web Toolkit)的code splitting功能在webpack中进行实现。然后在2014年Instagram团队分享性能优化时，提出使用webpack的code splitting特性从而大火。 现在webpack的出现模糊了任务和构建的边界在webpack出现之前，我们使用gulp、grunt做任务的，构建是用其他工具实现，而现在webpack使其融为一体。
+
+![](/source/5.png)
+
+之前我们在html加载js资源的时候，需要使用script标签，加载css也需要编写css文件进行加载，这样我们每次html加载的时候就需要加载多个资源。而webpack将所有的资源都打包到js中，会有一个entry入口文件,entry引入了js、css等资源文件，打包到一个bundle文件中，这样就加载一个资源。
+
+webpack最初核心解决的问题就是代码合并与拆分，它的核心理念是将资源都视为模块，统一进行打包和处理，然后再按规则进行拆分，提供了loader和plugin完成功能扩展。
+
+::: tip webpack5知识体系
+https://gitmind.cn/app/docs/m1foeg1o
+:::
 ## 核心概念
 * entry：入口模块文件路径
 * output: 输出bundle文件路径
-* module：模块，webpack构建对象
+* module：模块，webpack构建  对象
 * bundle：输出文件，webpack构建产物
 * chunk：构建生成bundle过程中，产生的中间文件，webpack构建的中间产物
 * loader：文件转换器
@@ -412,3 +423,10 @@ CDN 的全称是 Content DeliveryNetwork，即内容分发网络。CDN 是构建
 
 #### 生产环境关闭sourceMap
 sourceMap 本质上是一种映射关系，打包出来的 js 文件中的代码可以映射到代码文件的具体位置,这种映射关系会帮助我们直接 找到在源代码中的错误。但这样会使项目打包速度减慢，项目体积变大，可以在生产环境关闭 sourceMap
+
+## 源码解析
+webpack本身不是一个脚手架，它的脚手架是由webpack-cli实现的。
+
+
+## 相关文章
+* [[万字总结] 一文吃透 Webpack 核心原理](https://juejin.cn/post/6949040393165996040) 
