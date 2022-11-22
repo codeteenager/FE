@@ -2,7 +2,7 @@
 # 前端知识体系
 阿里巴巴前端知识图谱官网：https://f2e.tech/
 
-![知识图谱](/web/1.png)
+![知识图谱](/web/foundation/1.png)
 
 ## 学习资料
 * [MDN](https://developer.mozilla.org/zh-CN/)

@@ -427,6 +427,353 @@ sourceMap 本质上是一种映射关系，打包出来的 js 文件中的代码
 ## 源码解析
 webpack本身不是一个脚手架，它的脚手架是由webpack-cli实现的。
 
+首先看一下webpack这个命令的定义，它在webpack包中package.json文件的bin中配置。
+
+```js
+"bin": {
+    "webpack": "bin/webpack.js"
+},
+```
+在webpack中找到bin/webpack.js文件，看一下文件的内容。
+```js
+#!/usr/bin/env node
+
+/**
+ * @param {string} command process to run
+ * @param {string[]} args command line arguments
+ * @returns {Promise<void>} promise
+ */
+const runCommand = (command, args) => {
+	const cp = require("child_process");
+	return new Promise((resolve, reject) => {
+		const executedCommand = cp.spawn(command, args, {
+			stdio: "inherit",
+			shell: true
+		});
+
+		executedCommand.on("error", error => {
+			reject(error);
+		});
+
+		executedCommand.on("exit", code => {
+			if (code === 0) {
+				resolve();
+			} else {
+				reject();
+			}
+		});
+	});
+};
+
+/**
+ * @param {string} packageName name of the package
+ * @returns {boolean} is the package installed?
+ */
+const isInstalled = packageName => {
+	if (process.versions.pnp) {
+		return true;
+	}
+
+	const path = require("path");
+	const fs = require("graceful-fs");
+
+	let dir = __dirname;
+
+	do {
+		try {
+			if (
+				fs.statSync(path.join(dir, "node_modules", packageName)).isDirectory()
+			) {
+				return true;
+			}
+		} catch (_error) {
+			// Nothing
+		}
+	} while (dir !== (dir = path.dirname(dir)));
+
+	return false;
+};
+
+/**
+ * @param {CliOption} cli options
+ * @returns {void}
+ */
+const runCli = cli => {
+	const path = require("path");
+	const pkgPath = require.resolve(`${cli.package}/package.json`);
+	// eslint-disable-next-line node/no-missing-require
+	const pkg = require(pkgPath);
+	// eslint-disable-next-line node/no-missing-require
+	require(path.resolve(path.dirname(pkgPath), pkg.bin[cli.binName]));
+};
+
+/**
+ * @typedef {Object} CliOption
+ * @property {string} name display name
+ * @property {string} package npm package name
+ * @property {string} binName name of the executable file
+ * @property {boolean} installed currently installed?
+ * @property {string} url homepage
+ */
+
+/** @type {CliOption} */
+const cli = {
+	name: "webpack-cli",
+	package: "webpack-cli",
+	binName: "webpack-cli",
+	installed: isInstalled("webpack-cli"),
+	url: "https://github.com/webpack/webpack-cli"
+};
+
+if (!cli.installed) {
+	const path = require("path");
+	const fs = require("graceful-fs");
+	const readLine = require("readline");
+
+	const notify =
+		"CLI for webpack must be installed.\n" + `  ${cli.name} (${cli.url})\n`;
+
+	console.error(notify);
+
+	let packageManager;
+
+	if (fs.existsSync(path.resolve(process.cwd(), "yarn.lock"))) {
+		packageManager = "yarn";
+	} else if (fs.existsSync(path.resolve(process.cwd(), "pnpm-lock.yaml"))) {
+		packageManager = "pnpm";
+	} else {
+		packageManager = "npm";
+	}
+
+	const installOptions = [packageManager === "yarn" ? "add" : "install", "-D"];
+
+	console.error(
+		`We will use "${packageManager}" to install the CLI via "${packageManager} ${installOptions.join(
+			" "
+		)} ${cli.package}".`
+	);
+
+	const question = `Do you want to install 'webpack-cli' (yes/no): `;
+
+	const questionInterface = readLine.createInterface({
+		input: process.stdin,
+		output: process.stderr
+	});
+
+	// In certain scenarios (e.g. when STDIN is not in terminal mode), the callback function will not be
+	// executed. Setting the exit code here to ensure the script exits correctly in those cases. The callback
+	// function is responsible for clearing the exit code if the user wishes to install webpack-cli.
+	process.exitCode = 1;
+	questionInterface.question(question, answer => {
+		questionInterface.close();
+
+		const normalizedAnswer = answer.toLowerCase().startsWith("y");
+
+		if (!normalizedAnswer) {
+			console.error(
+				"You need to install 'webpack-cli' to use webpack via CLI.\n" +
+					"You can also install the CLI manually."
+			);
+
+			return;
+		}
+		process.exitCode = 0;
+
+		console.log(
+			`Installing '${
+				cli.package
+			}' (running '${packageManager} ${installOptions.join(" ")} ${
+				cli.package
+			}')...`
+		);
+
+		runCommand(packageManager, installOptions.concat(cli.package))
+			.then(() => {
+				runCli(cli);
+			})
+			.catch(error => {
+				console.error(error);
+				process.exitCode = 1;
+			});
+	});
+} else {
+	runCli(cli);
+}
+
+```
+其中cli定义了webpack-cli的一系列信息，像name、package、binName、isinstalled，isinstalled是判断webpack-cli是否安装，他调用了isInstalled()函数，然后在这个函数中他会循环查找，先在当前目录下查找node_modules/webpack-cli，然后找到上层目录查找node_modules/webpack-cli，直到找到则返回true，没找到返回false。如果没找到在下面会进行isinstalled判断，没找到则提示安装webpack-cli。如果安装了webpack-cli，它会直接执行runCli命令，在runCli中它会找到webpack-cli的package.json文件并读取获取其中的bin配置webpack-cli的路径，然后再require进来，这样webpack就把相关操作交给webpack-cli去执行。然后看一下webpack-cli的命令定义：
+
+```js
+"bin": {
+    "webpack-cli": "./bin/cli.js"
+},
+```
+然后看一下cli.js的源码
+
+```js
+const importLocal = require("import-local");
+const runCLI = require("../lib/bootstrap");
+
+if (!process.env.WEBPACK_CLI_SKIP_IMPORT_LOCAL) {
+  // Prefer the local installation of `webpack-cli`
+  if (importLocal(__filename)) {
+    return;
+  }
+}
+
+process.title = "webpack";
+
+runCLI(process.argv);
+```
+
+它使用import-local库来判断当前调用环境是否是webpack-cli源码，修改进程名为webpack，然后调用bootstrap提供的runCLI方法并把命令行参数传递过去。然后看一下runCLI的定义。
+
+```js
+const WebpackCLI = require("./webpack-cli");
+const runCLI = async (args) => {
+    // Create a new instance of the CLI object
+    const cli = new WebpackCLI();
+    try {
+        await cli.run(args);
+    }
+    catch (error) {
+        cli.logger.error(error);
+        process.exit(2);
+    }
+};
+module.exports = runCLI;
+```
+在runCLI方法中它实例化一个WebpackCLI对象，然后调用run方法。先看一下构造方法的定义
+
+```js
+const { program, Option } = require("commander");
+...
+constructor() {
+        this.colors = this.createColors();
+        this.logger = this.getLogger();
+        // Initialize program
+        this.program = program;
+        this.program.name("webpack");
+        this.program.configureOutput({
+            writeErr: this.logger.error,
+            outputError: (str, write) => write(`Error: ${this.capitalizeFirstLetter(str.replace(/^error:/, "").trim())}`),
+        });
+}
+```
+其中主要是定义了program，program是commander提供的。
+然后看一下run方法
+```js
+
+```
+接下来看一下webpack实例化的逻辑
+
+```js
+const webpack = /** @type {WebpackFunctionSingle & WebpackFunctionMulti} */ (
+	/**
+	 * @param {WebpackOptions | (ReadonlyArray<WebpackOptions> & MultiCompilerOptions)} options options
+	 * @param {Callback<Stats> & Callback<MultiStats>=} callback callback
+	 * @returns {Compiler | MultiCompiler}
+	 */
+	(options, callback) => {
+		const create = () => {
+			if (!asArray(options).every(webpackOptionsSchemaCheck)) {
+				getValidateSchema()(webpackOptionsSchema, options);
+				util.deprecate(
+					() => {},
+					"webpack bug: Pre-compiled schema reports error while real schema is happy. This has performance drawbacks.",
+					"DEP_WEBPACK_PRE_COMPILED_SCHEMA_INVALID"
+				)();
+			}
+			/** @type {MultiCompiler|Compiler} */
+			let compiler;
+			let watch = false;
+			/** @type {WatchOptions|WatchOptions[]} */
+			let watchOptions;
+			if (Array.isArray(options)) {
+				/** @type {MultiCompiler} */
+				compiler = createMultiCompiler(
+					options,
+					/** @type {MultiCompilerOptions} */ (options)
+				);
+				watch = options.some(options => options.watch);
+				watchOptions = options.map(options => options.watchOptions || {});
+			} else {
+				const webpackOptions = /** @type {WebpackOptions} */ (options);
+				/** @type {Compiler} */
+				compiler = createCompiler(webpackOptions);
+				watch = webpackOptions.watch;
+				watchOptions = webpackOptions.watchOptions || {};
+			}
+			return { compiler, watch, watchOptions };
+		};
+		if (callback) {
+			try {
+				const { compiler, watch, watchOptions } = create();
+				if (watch) {
+					compiler.watch(watchOptions, callback);
+				} else {
+					compiler.run((err, stats) => {
+						compiler.close(err2 => {
+							callback(err || err2, stats);
+						});
+					});
+				}
+				return compiler;
+			} catch (err) {
+				process.nextTick(() => callback(err));
+				return null;
+			}
+		} else {
+			const { compiler, watch } = create();
+			if (watch) {
+				util.deprecate(
+					() => {},
+					"A 'callback' argument needs to be provided to the 'webpack(options, callback)' function when the 'watch' option is set. There is no way to handle the 'watch' option without a callback.",
+					"DEP_WEBPACK_WATCH_WITHOUT_CALLBACK"
+				)();
+			}
+			return compiler;
+		}
+	}
+);
+```
+实例化的时候传入options选项和callback回调函数，如果传入callback的话，就会调用create函数，create函数中完成了compiler的创建并判断是否进行watch监听，如果watch监听为true的话会调用compiler.watch，否则调用compiler.run。如果有异常则调用callback传递异常信息。
+如果没有传callback的话，同样会拿到compiler和watch，并把compiler返回。
+
+在create函数中，先调用getNormalizedWebpackOptions对options进行格式化添加默认的配置项，然后判断options是否是一个数组，因为我们通常传入的是一个对象所以可以看else部分的，它会去调用createCompiler来创建一个compiler对象
+
+```js
+/**
+ * @param {WebpackOptions} rawOptions options object
+ * @returns {Compiler} a compiler
+ */
+const createCompiler = rawOptions => {
+	const options = getNormalizedWebpackOptions(rawOptions);
+	applyWebpackOptionsBaseDefaults(options);
+	const compiler = new Compiler(options.context, options);
+	new NodeEnvironmentPlugin({
+		infrastructureLogging: options.infrastructureLogging
+	}).apply(compiler);
+	if (Array.isArray(options.plugins)) {
+		for (const plugin of options.plugins) {
+			if (typeof plugin === "function") {
+				plugin.call(compiler, compiler);
+			} else {
+				plugin.apply(compiler);
+			}
+		}
+	}
+	applyWebpackOptionsDefaults(options);
+	compiler.hooks.environment.call();
+	compiler.hooks.afterEnvironment.call();
+	new WebpackOptionsApply().process(options, compiler);
+	compiler.hooks.initialize.call();
+	return compiler;
+};
+```
+在createCompiler方法中先创建了Compiler实例，然后遍历自定义的plugin，如果plugin是一个function则直接进行调用，如果是一个对象则执行apply方法，在这一步中如果plugin有问题则直接会报错。当自定义plugin注册完之后，再去注册内置的plugin。插件注册完之后再去执行钩子函数，然后调用WebpackOptionsApply类会在初始化阶段根据配置内容动态注入对应的插件，调用init钩子函数初始化方法。
+
 
 ## 相关文章
 * [[万字总结] 一文吃透 Webpack 核心原理](https://juejin.cn/post/6949040393165996040) 
+* [【万字】透过分析 webpack 面试题，构建 webpack5.x 知识体系](https://juejin.cn/post/7023242274876162084)

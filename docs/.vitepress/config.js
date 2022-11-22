@@ -31,27 +31,15 @@ module.exports = {
             "/web/": [
 
                 {
-                    text: "基础",
+                    text: "前端基础",
                     items: [
                         {
                             text: "介绍",
-                            link: "/web/index",
+                            link: "/web/foundation/index",
                         },
                         {
-                            text: "技术博文",
-                            link: "/web/blog",
-                        },
-                        {
-                            text: "技术分享",
-                            link: "/web/share",
-                        },
-                        {
-                            text: "杂文",
-                            link: "/web/essay",
-                        },
-                        {
-                            text: "Git工作流规范",
-                            link: "/web/git",
+                            text: "JavaScript性能优化",
+                            link: "/web/foundation/javascript-optimization",
                         },
                         {
                             text: "中后台解决方案",
@@ -69,6 +57,10 @@ module.exports = {
                             link: "/web/project/index",
                         },
                         {
+                            text: "Git工作流规范",
+                            link: "/web/project/git",
+                        },
+                        {
                             text: "模块化",
                             link: "/web/project/module",
                         },
@@ -77,10 +69,33 @@ module.exports = {
                             link: "/web/project/npm",
                         },
                         {
+                            text: "npm仓库",
+                            link: "/web/project/registry",
+                        },
+                        {
                             text: "Webpack",
                             link: "/web/project/webpack",
                         },
                     ],
+                },
+                {
+                    text: "其他",
+                    collapsible: true,
+                    collapsed: true,
+                    items: [
+                        {
+                            text: "技术博文",
+                            link: "/web/other/blog",
+                        },
+                        {
+                            text: "技术分享",
+                            link: "/web/other/share",
+                        },
+                        {
+                            text: "杂文",
+                            link: "/web/other/essay",
+                        },
+                    ]
                 }
             ],
             "/source/": [

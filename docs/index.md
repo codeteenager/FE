@@ -14,7 +14,7 @@ hero:
   actions:
     - theme: brand
       text: 开始
-      link: /web/index
+      link: /web/foundation/index
  
 features:
   - icon: 💡
