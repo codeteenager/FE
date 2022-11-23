@@ -15,7 +15,7 @@ module.exports = {
         nav: [
             {
                 text: '博文',
-                link: "/web/index"
+                link: "/web/foundation/index"
             },
             {
                 text: '源码学习',
@@ -24,7 +24,7 @@ module.exports = {
         ],
         footer: {
             message: 'Released under the MIT License.',
-            copyright: 'Copyright © 2022-present Codeteenager'
+            copyright: 'Copyright © 2022-present codeteenager'
         },
         socialLinks: [{ icon: "github", link: "https://github.com/codeteenager/FE" }],
         sidebar: {
