@@ -11,6 +11,9 @@
 * [VueSSR性能优化实践](/FE/pdf/VueSSR性能优化实践.pdf)
 * [如何用babel做静态分析和代码转换](/FE/pdf/如何用babel做静态分析和代码转换.pdf)
 * [⼀种秒级安装npm的⽅式](/FE/pdf/⼀种秒级安装npm的⽅式.pdf)
+* [工作10年，我在前端专业成长路上的探索](/FE/pdf/工作10年，我在前端专业成长路上的探索.pdf)
+* [程序员为什么不喜欢低代码](/FE/pdf/程序员为什么不喜欢低代码.pdf)
+* [从Node.js到Deno：一个安全高效的JavaScript_TypeScript运行时](/FE/pdf/从Node.js到Deno：一个安全高效的JavaScript_TypeScript运行时.pdf)
 
 ## 基础设施建设
 * [错误监控天眼](/FE/pdf/错误监控天眼.pdf)
@@ -55,13 +58,26 @@
 * [百度工程能力提升之道](/FE/pdf/百度工程能力提升之道.pdf)
 * [百度工程效能提升之路](/FE/pdf/百度工程效能提升之路.pdf)
 * [如何基于Node做DevOps实战](/FE/pdf/如何基于Node做DevOps实战.pdf)
-
-## 研发效能
+* [webpack实战入门进阶调优分享](/FE/pdf/webpack实战入门进阶调优分享.pdf)
+* [从产品设计到发布的全链路智能化方案](/FE/pdf/从产品设计到发布的全链路智能化方案.pdf)
+* [从中台的前端走向前端的中台](/FE/pdf/从中台的前端走向前端的中台.pdf)
+* [把前端监控做到极致](/FE/pdf/把前端监控做到极致.pdf)
+* [从⼀到⽆穷⼤：前端⼯程化中的实践与臆测](/FE/pdf/从⼀到⽆穷⼤：前端⼯程化中的实践与臆测.pdf)
+* [IMWeb-DevOps研发效能实践](/FE/pdf/IMWeb-DevOps研发效能实践.pdf)
+* [GMTC极限前端性能优化](/FE/pdf/GMTC极限前端性能优化.pdf)
+* [Sentry前端异常监控平台的落地](/FE/pdf/Sentry前端异常监控平台的落地.pdf)
+* [Google效能工具的实践之路](/FE/pdf/Google效能工具的实践之路.pdf)
+* [从前端和云厂商的视角看Serverless与未来的开发生态](/FE/pdf/从前端和云厂商的视角看Serverless与未来的开发生态.pdf)
+* [Serverless前端落地与实践](/FE/pdf/Serverless前端落地与实践.pdf)
+* [Serverless实战与进阶](/FE/pdf/Serverless实战与进阶.pdf)
+* [阿里跨境供应链前端架构演进与Serverless实践](/FE/pdf/阿里跨境供应链前端架构演进与Serverless实践.pdf)
+* [云端一体新前端工程模式在淘系前端的实践](/FE/pdf/云端一体新前端工程模式在淘系前端的实践.pdf)
 * [比心大前端研发效能体系](/FE/pdf/比心大前端研发效能体系.pdf)
 * [菜鸟前端研发效能探索与实践](/FE/pdf/菜鸟前端研发效能探索与实践.pdf)
 * [华泰Web前端研发效能提升之路](/FE/pdf/华泰Web前端研发效能提升之路.pdf)
 * [前端团队研发效能提升的探索与实践](/FE/pdf/前端团队研发效能提升的探索与实践.pdf)
 * [需求结构化表达为研发效能提升带来的新展望](/FE/pdf/需求结构化表达为研发效能提升带来的新展望.pdf)
+* [基于BPMN流程引擎驱动的前端研发平台](/FE/pdf/基于BPMN流程引擎驱动的前端研发平台.pdf)
 
 ## 微前端
 * [标准微前端架构在蚂蚁的落地实践](/FE/pdf/标准微前端架构在蚂蚁的落地实践.pdf)

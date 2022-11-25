@@ -148,5 +148,109 @@ V8把内存空间分成了两部分，左侧小空间用于存储新生代对象
 ## V8引擎执行流程
 V8引擎本身也是一个应用程序，它是JavaScript的运行环境，V8引擎主要用来解析和编译JavaScript代码，它的内部也有很多的子模块，如图所示：
 ![](/web/foundation/7.png)
-V8引擎是渲染引擎中执行JavaScript代码的一部分，Scanner是一个扫描器，他可以扫码JavaScript代码进行词法的分析，把JavaScript分析成tokens，parser是一个解析器，解析的过程就是语法分析的过程，它可以将tokens转换成抽象语法树，
+V8引擎是渲染引擎中执行JavaScript代码的一部分，Scanner是一个扫描器，他可以扫码JavaScript代码进行词法的分析，把JavaScript分析成tokens，parser是一个解析器，解析的过程就是语法分析的过程，它可以将tokens转换成抽象语法树，Ignition是V8提供的一个解释器，负责把抽象语法树AST转换成字节码。TurboFan是V8提供的编译器模块，把上一步提供的字节码编译成汇编代码去执行。
 
+## 变量局部化
+尽可能定义的变量存放在局部作用域中，减少数据访问时查找作用域链的路径，提高代码的执行效率。例如：
+```js
+//示例一
+var i,str="";
+function test(){
+	for(i=0;i<1000;i++){
+		str+=i;
+	}
+}
+test();
+
+//示例二
+function test(){
+	let str="";
+	for(let i=0;i<1000;i++){
+		str+=i;
+	}
+}
+test();
+```
+在[JSBench](https://jsbench.me/)中查看运行速度，示例二要比示例一更快一些。对于数据的存储和读取，希望能够减少作用域的访问层级。
+![](/web/foundation/8.png)
+
+## 缓存数据
+在代码编写的过程中，有一些数据在不同的地方会有多次的使用，这样的数据可以提前保存起来，以便后续使用，核心还是减少访问查询的层级。
+
+## 减少访问层级
+比如以下代码：
+```js
+//示例一
+function Person(){
+	this.name = "jie";
+	this.age = 18;
+}
+let p = new Person();
+console.log(p.age);
+
+//示例二
+function Person(){
+	this.name = "jie";
+	this.age = 18;
+	this.getAge = function(){
+		return this.age;
+	}
+}
+let p = new Person();
+console.log(p.getAge());
+```
+示例一访问的层数较示例二少，访问的更快一些。
+![](/web/foundation/9.png)
+
+## 防抖和节流
+在一些高频率事件触发的场景下不希望对应的事件处理函数多次执行，例如场景：
+1. 滚动事件
+2. 输入的模糊匹配
+3. 轮播图切换
+4. 点击操作
+5. ....
+
+出现以上场景的原因是，浏览器默认情况下都会有自己的监听事件间隔，如果检测到多次的事件监听执行，那么就会造成不必要的资源浪费。这时就需要防抖和节流。
+
+### 防抖
+防抖指在高频的操作只识别一次点击，可以认为是第一次或最后一次。
+
+### 节流
+节流指在高频的操作下可以自己设置频率，让本来会执行很多次的事件触发，按着定义的频率减少触发的次数。
+
+## 减少判断层级
+
+```js
+//示例一
+function doSomething(part, chapter){
+    const parts = ['ES2016','工程化','Vue','React','Node'];
+    if(part){
+        if(parts.includes(part)){
+            console.log('属于当前课程');
+            if(chapter > 5){
+                console.log('您需要提供VIP身份');
+            }
+        }
+    }else{
+        console.log('请确认模块信息');
+    }
+}
+doSomething('ES2016',6);
+
+//示例二
+function doSomething(part, chapter){
+    const parts = ['ES2016','工程化','Vue','React','Node'];
+    if(!part){
+        console.log('请确认模块信息');
+        return;
+    }
+    if(!parts.includes(part)) return;
+
+    console.log('属于当前课程');
+    if(chapter > 5){
+        console.log('您需要提供VIP身份');
+    }
+}
+doSomething('ES2016',6);
+```
+![](/web/foundation/10.png)
