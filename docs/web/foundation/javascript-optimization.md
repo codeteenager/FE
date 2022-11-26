@@ -215,10 +215,68 @@ console.log(p.getAge());
 ### 防抖
 防抖指在高频的操作只识别一次点击，可以认为是第一次或最后一次。
 
+```js
+/**
+ * handle: 最终需要执行的事件监听
+ * wait: 事件触发之后多久执行
+ * immediate: 控制执行第一次还是最后一次,false是最后一次
+ */
+function myDebounce(handle,wait,immediate){
+    if(typeof handle !== 'function') throw new Error('handle must be an function');
+    if(typeof wait === 'undefined') wait = 300;
+    if(typeof wait === 'boolean') {
+        immediate = wait;
+        wait = 300;
+    } 
+    if(typeof immediate !== 'boolean') immediate = false;
+    let timer = null;
+    return function proxy(...args){
+        let self =this;
+        init = immediate&&!timer;
+        clearTimeout(timer);
+        timer = setTimeout(()=>{
+            timer = null;
+            !init?handle.call(self,...args):null;
+        },wait);
+        //立即执行
+        init?handle.call(self,...args):null;
+    }
+}
+```
+
 ### 节流
 节流指在高频的操作下可以自己设置频率，让本来会执行很多次的事件触发，按着定义的频率减少触发的次数。
+```js
+function myThrottle(handle,wait){
+    if(typeof handle !== 'function') throw new Error('handle must be an function');
+    if(typeof wait === 'undefined') wait = 400;
+    let previous = 0;
+    let timer = null;
+    return function proxy(...args){
+        let now = new Date();
+        let self = this;
+        let interval = wait - (now - previous);
+        if(interval <= 0){
+            //是一个非高频的操作，可以执行handle
+            clearTimeout(timer);
+            timer = null;
+            handle.call(self,...args);
+            previous = new Date();
+        }else if(!timer){
+            //此时在定义的频率范围内，则不执行handle，这时候可以定义定时器，在规定时间后执行
+            timer = setTimeout(()=>{
+                clearTimeout(timer);
+                timer = null;
+                handle.call(self,...args);
+                previous = new Date();
+            },interval);
+        }
+    };
+}
+```
 
 ## 减少判断层级
+当有if else多层嵌套的时候，提前用return去减少嵌套层级。if else适合于区间的条件判断，switch case适合于确定枚举值的判断。
 
 ```js
 //示例一
@@ -253,4 +311,83 @@ function doSomething(part, chapter){
 }
 doSomething('ES2016',6);
 ```
+可以看出示例二的ops更多一些。
 ![](/web/foundation/10.png)
+
+## 减少循环体活动
+将循环体中经常使用又不变动的数据放到循环体的外部，做一个缓存，这样代码在执行过程中少做一些事情。
+```js
+//示例一
+function test(){
+    let i;
+    let arr = ['React','Vue','Angular'];
+    for(i=0;i<arr.length;i++){
+        console.log(arr[i]);
+    }       
+}
+test();
+
+//示例二
+function test(){
+    let i;
+    let arr = ['React','Vue','Angular'];
+    let len = arr.length;
+    for(i=0;i<len;i++){
+        console.log(arr[i]);
+    }       
+}
+test();
+```
+可以看出示例二的ops更多一些。
+![](/web/foundation/11.png)
+
+再者可以使用while循环替代for循环，从后往前的循环少做一些判断，从而更快一些。
+```js
+//示例一
+function test(){
+    let i;
+    let arr = ['React','Vue','Angular'];
+    let len = arr.length;
+    for(i=0;i<len;i++){
+        console.log(arr[i]);
+    }       
+}
+test();
+
+//示例二
+function test(){
+    let arr = ['React','Vue','Angular'];
+    let len = arr.length;
+    while(len--){
+        console.log(arr[len]);
+    }
+}
+test();
+```
+![](/web/foundation/12.png)
+
+## 字面量与构造式
+字面量的比构造式的快一些，字面量创建引用数据类型直接堆区中创建存放内容即可，而构造式创建是调用函数的方式会多做一些操作，所以速度会慢一些。
+
+```js
+//示例一
+function test(){
+    let obj = new Object();
+    obj.name = "test";
+    obj.age = 20;
+    return obj;
+}
+console.log(test());
+
+//示例二
+function test(){
+    let obj = {
+        name: "test",
+        age: 20
+    }
+    return obj;
+}
+console.log(test());
+```
+
+![](/web/foundation/13.png)
