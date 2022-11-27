@@ -42,6 +42,10 @@ module.exports = {
                             link: "/web/foundation/javascript-datatype",
                         },
                         {
+                            text: "JavaScript原型与原型链",
+                            link: "/web/foundation/javascript-prototype",
+                        },
+                        {
                             text: "JavaScript性能优化",
                             link: "/web/foundation/javascript-optimization",
                         },
