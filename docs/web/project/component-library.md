@@ -93,7 +93,7 @@
 ## 目录结构
 我们以Element UI为例，分析一下工程的目录结构。
 
-![](/web/foundation/28.png)
+![](/web/project/28.png)
 
 * build：打包工具的配置文件
 * examples：存放组件示例以及文档
@@ -116,11 +116,11 @@
 
 样式主题通常会借助CSS扩展语言的变量能力。例如，Element UI的样式使用Sass作为开发语言，并定义了一系列全局/组件的样式变量，开发人员可以根据需求进行相应调整。在Element UI中我们找到packages/theme-chalk/src/common/var.scss，我们可以看到样式主题配置变量如下。
 
-![](/web/foundation/29.png)
+![](/web/project/29.png)
 
 当开发人员需要进行样式定制时，可以通过变量覆盖的形式自定义相关参数值。除此之外Element UI也提供了在线主题编辑器，能够修改定制 Element 全部全局和组件的 Design Tokens，并能够方便地实时预览样式改变后的视觉。同时它还能够基于新的定制样式生成完整的样式文件包，供直接下载使用。
 
-![](/web/foundation/30.png)
+![](/web/project/30.png)
 
 ## 国际化
 国际化（Internationalization）是一种设计和制造方式，它可以帮助产品快速适应不同国家和区域的要求。它规定开发人员应该从产品中抽离所有与地域语言、国家/地区和文化相关的元素，并能通过配置等手段快速替换这些元素。以界面文字为例，不同的国家和地区需要使用不同的语言。
