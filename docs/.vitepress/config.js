@@ -38,8 +38,16 @@ module.exports = {
                             link: "/web/foundation/index",
                         },
                         {
+                            text: "JavaScript数据类型",
+                            link: "/web/foundation/javascript-datatype",
+                        },
+                        {
                             text: "JavaScript性能优化",
                             link: "/web/foundation/javascript-optimization",
+                        },
+                        {
+                            text: "浏览器工作原理",
+                            link: "/web/foundation/chrome",
                         },
                         {
                             text: "中后台解决方案",
@@ -75,6 +83,14 @@ module.exports = {
                         {
                             text: "Webpack",
                             link: "/web/project/webpack",
+                        },
+                        {
+                            text: "物料平台建设",
+                            link: "/web/project/material",
+                        },
+                        {
+                            text: "组件库建设",
+                            link: "/web/project/component-library",
                         },
                     ],
                 },
