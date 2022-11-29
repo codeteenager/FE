@@ -3,6 +3,19 @@
 * [Worktile 前端工程化之路](https://xie.infoq.cn/article/4f9190024b86a1e6f30ce0e78)
 * [型项目前端架构浅谈（8000字原创）](https://juejin.cn/post/6844903853859536903)
 * [if 我是前端团队 Leader，怎么制定前端协作规范?](https://juejin.cn/post/6844903897610321934)
+* [从设计到管理，如何快速打造技术产品](https://juejin.cn/post/6992872119709204494)
+* [ToB产品化前端团队技术之路](https://mp.weixin.qq.com/s/eFGopPyTF9DA3BMScOjQvw)
+* [ToB 前端 CI/CD 建设实践](https://mp.weixin.qq.com/s/REZ6qARsLpkKEU-bRSituA)
+* [前端质量保证体系建设](https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651245304&idx=1&sn=3b26b91670a6296c53b8bf0e074aae62&chksm=bd49137c8a3e9a6aeb1d5a88557dd1a0868ad03d01ebea51bcb94fa0700e63b10fd0b8f57a74&scene=21#wechat_redirect)
+* [解读新一代 Web 性能体验和质量指标](https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651236933&idx=1&sn=81b9a6b2e4ae6073d1c9235cecf2626c&chksm=bd4973c18a3efad73cebabc6d11159783887738ad27b532c3e1ebfbc15aba426803efb2e9e51&scene=21#wechat_redirect)
+* [研发效能提升最佳实践的探索](http://www.uml.org.cn/rdmana/202203161.asp)
+* [前端团队研发效能提升的探索与实践](https://blog.csdn.net/ch834301/article/details/114301753)
+* [研发效能提升最佳实践的探索](https://zhuanlan.zhihu.com/p/202972178?utm_source=ZHShareTargetIDMore)
+* [如何用研发效能搞垮一个团队](https://www.cnblogs.com/codingdevops/p/15356842.html)
+* [迈出工程开放的第一步，DEF工程微平台体系升级之路](https://www.bilibili.com/read/cv13815458/)
+* [58金融前端脚手架的设计与实现](https://zhuanlan.zhihu.com/p/311818609)
+* [if我是前端Leader，谈谈前端框架体系建设](https://bobi.ink/2019/12/06/fe-framework/)
+* [leo：从工程化角度出发的前端脚手架](https://juejin.cn/post/7049576737490862093)
 
 ## 技术团队
 

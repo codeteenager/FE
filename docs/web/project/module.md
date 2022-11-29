@@ -96,7 +96,9 @@ CommonJS要想在浏览器中使用的话需要使用browserify来打包。
 browserify打包原理主要是：通过自执行函数实现模块化，将每个模块编号，存入一个对象，每个模块标记依赖模块。它内部实现了require方法，核心是通过call方法调用模块，并传入require、module、exports方法，通过module存储模块信息，通过exports存储模块输出信息。
 
 ## AMD规范介绍
-AMD规范采用异步加载模块，允许指定回调函数。Node模块通常都位于本地，加载速度快，所以适用于同步加载，但是在浏览器运行环境中，用同步加载会阻塞浏览器渲染，所以在浏览器环境中，模块需要请求获取，适用于异步加载。因此就诞生了AMD规范，用于异步加载，其中require.js就是AMD的一个具体实现库。目前不管是CMD或是AMD用的都很少，在Node开发中通常用CommonJS规范，在浏览器中用ES Module规范。
+AMD规范采用异步加载模块，允许指定回调函数。Node模块通常都位于本地，加载速度快，所以适用于同步加载，但是在浏览器运行环境中，用同步加载会阻塞浏览器渲染，所以在浏览器环境中，模块需要请求获取，适用于异步加载。因此就诞生了AMD规范，用于异步加载，其中[require.js](https://requirejs.org/)就是AMD的一个具体实现库。目前不管是CMD或是AMD用的都很少，在Node开发中通常用CommonJS规范，在浏览器中用ES Module规范。
+
+引用了require.js之后，它会全局定义一个define函数和require函数，依赖度js会自动的异步加载。
 
 ## CMD规范介绍
 CMD规范整合了CommonJS和AMD的优点，通过异步加载模块。CMD专门用于浏览器端，其中sea.js就是CMD规范的一个具体实现库。

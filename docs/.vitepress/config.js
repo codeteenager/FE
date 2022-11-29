@@ -38,6 +38,10 @@ module.exports = {
                             link: "/web/foundation/index",
                         },
                         {
+                            text: "ECMAScript",
+                            link: "/web/foundation/ecmascript",
+                        },
+                        {
                             text: "JavaScript数据类型",
                             link: "/web/foundation/javascript-datatype",
                         },
@@ -52,6 +56,10 @@ module.exports = {
                         {
                             text: "浏览器工作原理",
                             link: "/web/foundation/chrome",
+                        },
+                        {
+                            text: "跨域",
+                            link: "/web/foundation/cross-domain",
                         },
                         {
                             text: "中后台解决方案",
