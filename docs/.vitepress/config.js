@@ -38,6 +38,14 @@ module.exports = {
                             link: "/web/foundation/index",
                         },
                         {
+                            text: "函数式编程",
+                            link: "/web/foundation/functional",
+                        },
+                        {
+                            text: "异步编程",
+                            link: "/web/foundation/asynchronous",
+                        },
+                        {
                             text: "ECMAScript",
                             link: "/web/foundation/ecmascript",
                         },
