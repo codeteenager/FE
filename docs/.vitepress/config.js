@@ -14,12 +14,16 @@ module.exports = {
         lastUpdatedText: '最近更新时间',
         nav: [
             {
-                text: '博文',
-                link: "/web/foundation/index"
+                text: '前端基础',
+                link: "/web/index"
             },
             {
-                text: '源码学习',
-                link: "/source/vuex"
+                text: '前端框架',
+                link: "/framework/vuex"
+            },
+            {
+                text: '前端工程化',
+                link: "/project/index"
             }
         ],
         footer: {
@@ -50,18 +54,6 @@ module.exports = {
                             link: "/web/foundation/ecmascript",
                         },
                         {
-                            text: "JavaScript数据类型",
-                            link: "/web/foundation/javascript-datatype",
-                        },
-                        {
-                            text: "JavaScript原型与原型链",
-                            link: "/web/foundation/javascript-prototype",
-                        },
-                        {
-                            text: "JavaScript性能优化",
-                            link: "/web/foundation/javascript-optimization",
-                        },
-                        {
                             text: "浏览器工作原理",
                             link: "/web/foundation/chrome",
                         },
@@ -71,53 +63,33 @@ module.exports = {
                         },
                         {
                             text: "中后台解决方案",
-                            link: "/web/admin",
+                            link: "/web/foundation/admin",
                         }
                     ],
                 },
                 {
-                    text: "工程化",
+                    text: "JavaScript",
                     collapsible: true,
-                    collapsed: true,
+                    collapsed: false,
                     items: [
                         {
-                            text: "介绍",
-                            link: "/web/project/index",
+                            text: "JavaScript数据类型",
+                            link: "/web/js/javascript-datatype",
                         },
                         {
-                            text: "Git工作流规范",
-                            link: "/web/project/git",
+                            text: "JavaScript原型与原型链",
+                            link: "/web/js/javascript-prototype",
                         },
                         {
-                            text: "模块化",
-                            link: "/web/project/module",
+                            text: "JavaScript性能优化",
+                            link: "/web/js/javascript-optimization",
                         },
-                        {
-                            text: "npm",
-                            link: "/web/project/npm",
-                        },
-                        {
-                            text: "npm仓库",
-                            link: "/web/project/registry",
-                        },
-                        {
-                            text: "Webpack",
-                            link: "/web/project/webpack",
-                        },
-                        {
-                            text: "物料平台建设",
-                            link: "/web/project/material",
-                        },
-                        {
-                            text: "组件库建设",
-                            link: "/web/project/component-library",
-                        },
-                    ],
+                    ]
                 },
                 {
                     text: "其他",
                     collapsible: true,
-                    collapsed: true,
+                    collapsed: false,
                     items: [
                         {
                             text: "技术博文",
@@ -134,25 +106,77 @@ module.exports = {
                     ]
                 }
             ],
-            "/source/": [
+            "/framework/": [
                 {
                     text: "Vue生态",
                     items: [
                         {
                             text: "Vuex",
-                            link: "/source/vuex.md",
+                            link: "/framework/vuex.md",
                         },
                         {
                             text: "Vue Router",
-                            link: "/source/vue-router.md",
+                            link: "/framework/vue-router.md",
                         },
                         {
                             text: "Nuxt",
-                            link: "/source/nuxt.md",
+                            link: "/framework/nuxt.md",
                         }
                     ],
                 }
             ],
+            "project":[
+                {
+                    text: "工程化",
+                    collapsible: true,
+                    collapsed: false,
+                    items: [
+                        {
+                            text: "介绍",
+                            link: "/project/index",
+                        },
+                        {
+                            text: "Git工作流规范",
+                            link: "/project/git",
+                        },
+                        {
+                            text: "模块化",
+                            link: "/project/module",
+                        },
+                        {
+                            text: "npm",
+                            link: "/project/npm",
+                        },
+                        {
+                            text: "npm仓库",
+                            link: "/project/registry",
+                        },
+                        {
+                            text: "Webpack",
+                            link: "/project/webpack",
+                        },
+                        {
+                            text: "物料平台建设",
+                            link: "/project/material",
+                        },
+                        {
+                            text: "组件库建设",
+                            link: "/project/component-library",
+                        },
+                    ],
+                },
+                {
+                    text: "构建",
+                    collapsible: true,
+                    collapsed: false,
+                    items: [
+                        {
+                            text: "介绍",
+                            link: "/project/index",
+                        },
+                    ],
+                },
+            ]
         },
         docFooter: {
             prev: '上一页',

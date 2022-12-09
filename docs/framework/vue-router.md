@@ -21,4 +21,4 @@
 
 ## 底层原理
 通过使用Vue.util.defineReactive将路由信息设置成响应式，然后通过router-link、$router.push、a href、浏览器前进、后退、手动更改URL等会触发Vue Router源码中的updateRoute方法，在updateRoute方法中去更改路由的响应式数据，数据更改后会自动触发router-view的更新，router-view会根据url匹配到渲染组件，
-![](/source/3.png)
+![](/framework/3.png)

@@ -35,7 +35,7 @@ setTimeout(function timer2 () {
 console.log('global end')
 ```
 刚开始执行的时候，JS引擎会将所有的代码加载进来，在调用栈中加入匿名的调用，匿名调用可以理解为将函数的全部代码放入匿名函数中执行，然后再逐行执行代码，执行console.log然后压入调用栈中，输出global begin，然后弹出栈。执行到setTimeout timer1时，会在web apis中执行，然后继续往下执行JS代码，执行到setTimeout timer2时也是一样，接着执行到console.log打印global end，然后再web apis中会有两个setTimeout，timer2触发的时间短，先执行，将timer2压入消息队列中，然后将timer1压入消息队列，然后EventLoop循环将timer2放入执行栈中开始执行输出timer2 invoke，然后遇到setTimeout inner，将其放入web apis中，然后执行timer1，输出timer1 invoke，循环往复。
-![](/web/foundation/26.png)
+![](/web/26.png)
 
 这里的同步模式和异步模式不是指写代码的方式，而是运行环境提供的api。常用的异步编程语法有promise、Generator、Async/await。
 
@@ -49,6 +49,29 @@ console.log('global end')
 2. 这个回调函数有两个参数分别是resolve和reject，这两个参数是两个函数，调用这两个函数的时候就是更改promise的状态。promise中有三种状态，分别是成功(fulfilled)、失败(rejected)、等待(pending)，它的状态只能是从pending=>fulfilled或者pending=>rejected，一旦状态确定就不可更改。resolve和reject函数是用来更改状态的，resolve将状态更改为fulfilled，而reject将状态更改为rejected。
 3. then方法内部做的事情就判断状态，如果状态是成功，调用成功的回调函数，如果状态是失败，则调用失败回调函数，而且then方法是被定义在原型对象中。
 4. then成功回调有一个参数，表示成功之后的值，then失败回调有一个参数，表示失败的原因。
+
+#### then方法的链式调用实现逻辑
+then方法是promise对象下的，每一个then方法都要返回promise对象，这样才能实现链式调用。然后将上一个then的回调函数返回值传递给下一个then方法的成功回调。其次在then方法回调函数中可以返回普通值，也可以返回promise对象，如果是普通值则直接传递给下一个promise2对象即可。如果是promise对象的话，则需要判断该promise的状态，如果是成功的则在promise2中调用resolve传入结果，如果是失败的则调用reject传入失败的原因即可。
+
+#### then方法识别Promise对象自返回
+promise的then链式调用如果在回调函数中返回自身，那么会主动报异常。
+```js
+var promise = new Promise(function(resolve,reject){
+    resolve(100);
+});
+var p1 = promise.then(function(value){
+    return p1;
+});
+p1.then(function(){
+
+},function(reason){
+    console.log(reason);
+});
+```
+
+#### 捕获错误
+错误捕获主要包括执行器的错误捕获，并reject掉。其次是then的回调函数报错，在下一个then错误处理函数中获取到。
+#### 代码演示
 ```js
 new Promise((resolve,reject)=>{
     resolve('成功');
@@ -72,7 +95,11 @@ class MyPromise{
     //失败回调
     failCallback = [];
     constructor(executor){
-        executor(this.resolve,this.reject);
+        try{
+            executor(this.resolve,this.reject);
+        }catch(e){
+            this.reject(e);
+        }
     }
     resolve = value=>{
         //如果状态不是等待，则阻止程序向下执行
@@ -82,9 +109,9 @@ class MyPromise{
         //保存成功之后的值
         this.value = value;
         //判断成功回调是否存在，存在则调用
-        this.successCallback && this.successCallback(this.value);
+        //this.successCallback && this.successCallback(this.value);
         while(this.successCallback.length){
-            this.successCallback.shift()(this.value);
+            this.successCallback.shift()();
         }
     }
     reject = reason=>{
@@ -95,23 +122,91 @@ class MyPromise{
         //保存失败的原因
         this.reason = reason;
         //判断失败回调是否存在，存在则调用
-        this.failCallback && this.failCallback(this.reason);
+        //this.failCallback && this.failCallback(this.reason);
          while(this.failCallback.length){
-            this.failCallback.shift()(this.reason);
+            this.failCallback.shift()();
         }
     }   
     then(successCallback,failCallback){
-        //判断状态
-        if(this.status === FULFILLED){
-            successCallback(this.value);
-        }else if(this.status === REJECTED){
-            failCallback(this.reason);
-        }else{
-            //等待
-            //将成功回调和失败回调存储
-            this.successCallback.push(successCallback);
-            this.failCallback.push(failCallback);
-        }
+        let promise2 = new Promise((resolve,reject)=>{
+            //判断状态
+            if(this.status === FULFILLED){
+                //这里用异步执行，等待同步执行完后才能获取到promise2，否则resolvePromise传递的promise2有问题
+                setTimeout(()=>{
+                    try{
+                        let x = successCallback(this.value);
+                        //判断x的值是普通值还是promise对象
+                        //如果是普通值，直接调用resolve
+                        //如果是Promise对象，查看promise对象返回的结果
+                        //再根据promise对象返回的结果，决定调用resolve还是调用reject
+                        resolvePromise(promise2,x,resolve,reject);
+                    }catch(e){
+                        reject(e);
+                    }
+                });
+                
+            }else if(this.status === REJECTED){
+                setTimeout(()=>{
+                    try{
+                        let x = failCallback(this.reason);;
+                        //判断x的值是普通值还是promise对象
+                        //如果是普通值，直接调用resolve
+                        //如果是Promise对象，查看promise对象返回的结果
+                        //再根据promise对象返回的结果，决定调用resolve还是调用reject
+                        resolvePromise(promise2,x,resolve,reject);
+                    }catch(e){
+                        reject(e);
+                    }
+                });
+                
+            }else{
+                //等待
+                //将成功回调和失败回调存储
+                this.successCallback.push(()=>{
+                    setTimeout(()=>{
+                        try{
+                            let x = successCallback(this.value);
+                            //判断x的值是普通值还是promise对象
+                            //如果是普通值，直接调用resolve
+                            //如果是Promise对象，查看promise对象返回的结果
+                            //再根据promise对象返回的结果，决定调用resolve还是调用reject
+                            resolvePromise(promise2,x,resolve,reject);
+                        }catch(e){
+                            reject(e);
+                        }
+                    });
+                });
+                this.failCallback.push(()=>{
+                    setTimeout(()=>{
+                        try{
+                            let x = failCallback(this.reason);;
+                            //判断x的值是普通值还是promise对象
+                            //如果是普通值，直接调用resolve
+                            //如果是Promise对象，查看promise对象返回的结果
+                            //再根据promise对象返回的结果，决定调用resolve还是调用reject
+                            resolvePromise(promise2,x,resolve,reject);
+                        }catch(e){
+                            reject(e);
+                        }
+                    });
+                });
+            }
+        });
+        
+        return promise2;
+    }
+}
+function resolvePromise(promise2,x,resolve,reject){
+    if(promise2 === x){
+        return reject(new TypeError('Chaining cycle detected for promise #<Promise>'));
+    }
+    //判断x是否是MyPromise的实例
+    if(x instanceof MyPromise){
+        //promise对象
+        x.then(resolve,reject);
+    }else{
+        //普通值
+        resolve(x);
     }
 }
 ```

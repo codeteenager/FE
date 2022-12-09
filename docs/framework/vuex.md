@@ -8,13 +8,13 @@
 * 视图，以声明方式将状态映射到视图；
 * 操作，响应在视图上的用户输入导致的状态变化。
 
-![](/source/1.png)
+![](/framework/1.png)
 
 从图中可以看到整个系统的运行是一个单向的，我们的数据驱动视图的更新，用户在视图上进行一些操作，然后触发action，通过action的方式去更改state，而不是视图直接更改state，
 
 然后看一下Vuex的运行机制，它不和组件进行强关联，可以独立的提供响应式数据。在图中可以看到Vuex提供的state数据驱动Vue Components视图，视图通过Dispatch派发action，我们在action中可以进行一些异步的操作，比如通过ajax请求接口获取后端数据，然后通过commit方式提交到Mutation，然后由mutation最终更改state。那么为什么要经过一层mutation呢？主要是为了在Devtools中记录数据的变化，这样我们可以通过插件来调试。所以说mutation是一个纯同步的操作，如果你有异步的操作需要在action中处理。如果没有异步的操作，可以从组件直接commit到mutation的。
 
-![](/source/2.png)
+![](/framework/2.png)
 
 ## 核心概念
 核心概念共分为以下五个部分：

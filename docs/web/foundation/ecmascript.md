@@ -2,10 +2,10 @@
 ECMAScript也是一门脚本语言，一般缩写为ES，通常看做JavaScript的标准化规范，但实际上JavaScript是ECMAScript的扩展语言。因为在ECMAScript当中只是提供了基础的语法，例如变量、函数等语言层面的语法。而JavaScript实现了ECMAScript的标准，并且在基础上做扩展，可以让开发者在浏览器上操作DOM和BOM，在Node环境中可以做读写文件这些操作。
 
 在浏览器环境中JavaScript等于ECMAScript+浏览器的API：DOM和BOM
-![](/web/foundation/23.png)
+![](/web/23.png)
 
 在浏览器环境中JavaScript等于ECMAScript+Node的API
-![](/web/foundation/24.png)
+![](/web/24.png)
 
 所以JavaScript本身指的就是ECMAScript，从2015年开始ES每年保持一个新版本的迭代，每次版本的迭代都有一些新特性。以下表格是ES的版本号和发行时间。
 

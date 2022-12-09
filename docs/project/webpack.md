@@ -1,7 +1,7 @@
 # webpack
 webpack于2012年3月10号诞生，作者是Tobias(德国)。参考GWT(Google Web Toolkit)的code splitting功能在webpack中进行实现。然后在2014年Instagram团队分享性能优化时，提出使用webpack的code splitting特性从而大火。 现在webpack的出现模糊了任务和构建的边界在webpack出现之前，我们使用gulp、grunt做任务的，构建是用其他工具实现，而现在webpack使其融为一体。
 
-![](/source/5.png)
+![](/framework/5.png)
 
 之前我们在html加载js资源的时候，需要使用script标签，加载css也需要编写css文件进行加载，这样我们每次html加载的时候就需要加载多个资源。而webpack将所有的资源都打包到js中，会有一个entry入口文件,entry引入了js、css等资源文件，打包到一个bundle文件中，这样就加载一个资源。
 
