@@ -15,7 +15,7 @@ module.exports = {
         nav: [
             {
                 text: '前端基础',
-                link: "/web/index"
+                link: "/web/foundation/index"
             },
             {
                 text: '前端框架',
@@ -125,7 +125,7 @@ module.exports = {
                     ],
                 }
             ],
-            "project":[
+            "project": [
                 {
                     text: "工程化",
                     collapsible: true,
@@ -136,32 +136,38 @@ module.exports = {
                             link: "/project/index",
                         },
                         {
-                            text: "Git工作流规范",
-                            link: "/project/git",
-                        },
-                        {
                             text: "模块化",
                             link: "/project/module",
                         },
+                    ],
+                },
+                {
+                    text: "工具",
+                    collapsible: true,
+                    collapsed: false,
+                    items: [
                         {
                             text: "npm",
                             link: "/project/npm",
                         },
                         {
-                            text: "npm仓库",
-                            link: "/project/registry",
-                        },
-                        {
                             text: "Webpack",
                             link: "/project/webpack",
                         },
+                    ],
+                },
+                {
+                    text: "规范",
+                    collapsible: true,
+                    collapsed: false,
+                    items: [
                         {
-                            text: "物料平台建设",
-                            link: "/project/material",
+                            text: "项目研发流程",
+                            link: "/project/project-process",
                         },
                         {
-                            text: "组件库建设",
-                            link: "/project/component-library",
+                            text: "Git工作流规范",
+                            link: "/project/git",
                         },
                     ],
                 },
@@ -170,9 +176,35 @@ module.exports = {
                     collapsible: true,
                     collapsed: false,
                     items: [
+                        // {
+                        //     text: "介绍",
+                        //     link: "/project/index",
+                        // },
+                    ],
+                },
+                {
+                    text: "部署",
+                    collapsible: true,
+                    collapsed: false,
+                    items: [
                         {
-                            text: "介绍",
-                            link: "/project/index",
+                            text: "npm仓库",
+                            link: "/project/registry",
+                        },
+                    ],
+                },
+                {
+                    text: "解决方案",
+                    collapsible: true,
+                    collapsed: false,
+                    items: [
+                        {
+                            text: "物料平台建设",
+                            link: "/project/material",
+                        },
+                        {
+                            text: "组件库建设",
+                            link: "/project/component-library",
                         },
                     ],
                 },

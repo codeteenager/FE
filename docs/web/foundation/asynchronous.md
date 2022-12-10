@@ -48,13 +48,14 @@ console.log('global end')
 1. 首先Promise是一个类，在实例化这个类的时候传入一个回调函数，这个回调函数称之为执行器，这个执行器会立即执行，当我们new Promise的时候，这个回调函数会立即调用。
 2. 这个回调函数有两个参数分别是resolve和reject，这两个参数是两个函数，调用这两个函数的时候就是更改promise的状态。promise中有三种状态，分别是成功(fulfilled)、失败(rejected)、等待(pending)，它的状态只能是从pending=>fulfilled或者pending=>rejected，一旦状态确定就不可更改。resolve和reject函数是用来更改状态的，resolve将状态更改为fulfilled，而reject将状态更改为rejected。
 3. then方法内部做的事情就判断状态，如果状态是成功，调用成功的回调函数，如果状态是失败，则调用失败回调函数，而且then方法是被定义在原型对象中。
-4. then成功回调有一个参数，表示成功之后的值，then失败回调有一个参数，表示失败的原因。
+4. then成功回调有一个参数，表示成功之后的值，then失败回调有一个参数，表示失败的原因。如果不传递参数，则内部设置默认值。
 
 #### then方法的链式调用实现逻辑
 then方法是promise对象下的，每一个then方法都要返回promise对象，这样才能实现链式调用。然后将上一个then的回调函数返回值传递给下一个then方法的成功回调。其次在then方法回调函数中可以返回普通值，也可以返回promise对象，如果是普通值则直接传递给下一个promise2对象即可。如果是promise对象的话，则需要判断该promise的状态，如果是成功的则在promise2中调用resolve传入结果，如果是失败的则调用reject传入失败的原因即可。
 
 #### then方法识别Promise对象自返回
 promise的then链式调用如果在回调函数中返回自身，那么会主动报异常。
+
 ```js
 var promise = new Promise(function(resolve,reject){
     resolve(100);
@@ -71,6 +72,16 @@ p1.then(function(){
 
 #### 捕获错误
 错误捕获主要包括执行器的错误捕获，并reject掉。其次是then的回调函数报错，在下一个then错误处理函数中获取到。
+
+#### Promise.all
+Promise.all方法是为了解决异步并发问题而生，它允许我们通过异步并发调用的顺序获取异步对应的结果。Promise.all返回值是一个promise对象,它是一个静态方法。如果它的所有Promise对象状态都是成功的，则返回Promise状态是成功，有一个是失败的则返回Promise对象就是失败的。
+
+#### finally方法
+无论promise最终执行的状态是成功的还是失败的，finally方法的回调函数都会执行一次，在finally后面可以链式调用then拿到promise最终返回的结果。
+
+#### catch方法
+该方法用来处理当前promise对象状态为失败的情况，then方法可以不传失败的回调，从而被catch方法所捕获。
+
 #### 代码演示
 ```js
 new Promise((resolve,reject)=>{
@@ -128,6 +139,8 @@ class MyPromise{
         }
     }   
     then(successCallback,failCallback){
+        successCallback = successCallback ? successCallback : value = value;
+        failCallback = failCallback ? failCallback : reason =>{ throw reason };
         let promise2 = new Promise((resolve,reject)=>{
             //判断状态
             if(this.status === FULFILLED){
@@ -194,6 +207,44 @@ class MyPromise{
         });
         
         return promise2;
+    }
+    static all(array){
+        let result = [];
+        let index = 0;
+        return new MyPromise((resolve,reject)=>{
+            function addData(key,value){
+                result[key] = value;
+                index++;
+                if(index === array.length){
+                    resolve(result);
+                }
+            }
+            for(let i = 0;i<array.length;i++){
+                let current = array[i];
+                //判断是普通值还是promise对象
+                if(current instanceof MyPromise){
+                    //promise对象
+                    current.then(value=>addData(i,value),reason=>reject(reason));
+                }else{
+                    //普通值
+                    addData(i,array[i]);
+                }
+            }
+        });
+    }
+    static resolve(value){
+        if(value instanceof MyPromise) return value;
+        return new MyPromise(resolve=>resolve(value));
+    }
+    finally(callback){
+        return this.then((value)=>{
+            return MyPromise.resolve(callback()).then(()=>value);
+        },()=>{
+            return MyPromise.resolve(callback()).then(()=>{throw reason;});
+        })
+    }
+    catch(failCallback){
+        return this.then(undefined,failCallback);
     }
 }
 function resolvePromise(promise2,x,resolve,reject){

@@ -485,6 +485,7 @@ trace('split 之后'), split(' '))
 console.log(f('NEVER SAY DIE'))
 ```
 
+我们可以去编写上述的trace函数作为辅助函数，打印中间的结果。
 
 
 ## 相关资料
