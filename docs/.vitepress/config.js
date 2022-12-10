@@ -148,11 +148,11 @@ module.exports = {
                     items: [
                         {
                             text: "npm",
-                            link: "/project/npm",
+                            link: "/project/tools/npm",
                         },
                         {
                             text: "Webpack",
-                            link: "/project/webpack",
+                            link: "/project/tools/webpack",
                         },
                     ],
                 },
@@ -162,12 +162,16 @@ module.exports = {
                     collapsed: false,
                     items: [
                         {
+                            text: "规范化",
+                            link: "/project/standard/index",
+                        },
+                        {
                             text: "项目研发流程",
-                            link: "/project/project-process",
+                            link: "/project/standard/project-process",
                         },
                         {
                             text: "Git工作流规范",
-                            link: "/project/git",
+                            link: "/project/standard/git",
                         },
                     ],
                 },
@@ -189,7 +193,7 @@ module.exports = {
                     items: [
                         {
                             text: "npm仓库",
-                            link: "/project/registry",
+                            link: "/project/deploy/registry",
                         },
                     ],
                 },
@@ -200,11 +204,11 @@ module.exports = {
                     items: [
                         {
                             text: "物料平台建设",
-                            link: "/project/material",
+                            link: "/project/solution/material",
                         },
                         {
                             text: "组件库建设",
-                            link: "/project/component-library",
+                            link: "/project/solution/component-library",
                         },
                     ],
                 },

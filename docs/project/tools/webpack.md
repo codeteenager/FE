@@ -18,6 +18,7 @@ https://gitmind.cn/app/docs/m1foeg1o
 * chunk：构建生成bundle过程中，产生的中间文件，webpack构建的中间产物
 * loader：文件转换器
 * plugin：插件，执行特定任务
+* mode：工作模式，默认采用production模式，
 
 ## 项目初始化流程
 1. 创建npm项目
@@ -27,8 +28,8 @@ https://gitmind.cn/app/docs/m1foeg1o
 5. 配置package.json的build命令
 6. 执行npm run build 打包
 ## 常见的loader
-* style-loader
-* css-loader
+* style-loader：将css-loader转换后的结果，通过style标签的方式追加到页面中
+* css-loader：将css文件转换为js模块
 
 ## 自定义loader
 
