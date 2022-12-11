@@ -180,10 +180,10 @@ module.exports = {
                     collapsible: true,
                     collapsed: false,
                     items: [
-                        // {
-                        //     text: "介绍",
-                        //     link: "/project/index",
-                        // },
+                        {
+                            text: "增量更新",
+                            link: "/project/build/update",
+                        },
                     ],
                 },
                 {
@@ -194,6 +194,10 @@ module.exports = {
                         {
                             text: "npm仓库",
                             link: "/project/deploy/registry",
+                        },
+                        {
+                            text: "灰度发布",
+                            link: "/project/deploy/grey-publish",
                         },
                     ],
                 },
