@@ -154,6 +154,10 @@ module.exports = {
                             text: "Webpack",
                             link: "/project/tools/webpack",
                         },
+                        {
+                            text: "脚手架",
+                            link: "/project/tools/cli",
+                        },
                     ],
                 },
                 {
