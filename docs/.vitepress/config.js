@@ -60,10 +60,6 @@ module.exports = {
                         {
                             text: "跨域",
                             link: "/web/foundation/cross-domain",
-                        },
-                        {
-                            text: "中后台解决方案",
-                            link: "/web/foundation/admin",
                         }
                     ],
                 },
@@ -84,6 +80,14 @@ module.exports = {
                             text: "JavaScript性能优化",
                             link: "/web/js/javascript-optimization",
                         },
+                        {
+                            text: "JS常见的6种继承方式",
+                            link: "/web/js/extends"
+                        },
+                        {
+                            text: "apply&call&bind原理介绍",
+                            link: "/web/js/call-apply-bind"
+                        }
                     ]
                 },
                 {
@@ -147,6 +151,10 @@ module.exports = {
                     collapsed: false,
                     items: [
                         {
+                            text: "介绍",
+                            link: "/project/tools/index",
+                        },
+                        {
                             text: "npm",
                             link: "/project/tools/npm",
                         },
@@ -188,6 +196,10 @@ module.exports = {
                             text: "增量更新",
                             link: "/project/build/update",
                         },
+                        {
+                            text: "No-bundle",
+                            link: "/project/build/nobundle",
+                        },
                     ],
                 },
                 {
@@ -218,6 +230,10 @@ module.exports = {
                             text: "组件库建设",
                             link: "/project/solution/component-library",
                         },
+                        {
+                            text: "中后台解决方案",
+                            link: "/project/solution/admin",
+                        }
                     ],
                 },
             ]

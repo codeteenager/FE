@@ -16,6 +16,18 @@
 * [58金融前端脚手架的设计与实现](https://zhuanlan.zhihu.com/p/311818609)
 * [if我是前端Leader，谈谈前端框架体系建设](https://bobi.ink/2019/12/06/fe-framework/)
 * [leo：从工程化角度出发的前端脚手架](https://juejin.cn/post/7049576737490862093)
+* [一个程序员的成长之路](https://github.com/fouber/blog/issues/41)
+* [淘系运营工作台前端体系](https://toutiao.io/posts/emauvro/preview)
+
+## 大厂解密篇
+* [解密智联招聘的大前端架构 Ada](https://www.infoq.cn/article/oh6CvBPwzgCHBTSFcePv)
+* [解密国内BAT等大厂前端技术体系-阿里篇（长文建议收藏）](https://juejin.cn/post/6844903967764250637)
+* [解密国内BAT等大厂前端技术体系-百度篇（长文建议收藏）](https://juejin.cn/post/6844903974466764813)
+* [解密国内BAT等大厂前端技术体系-腾讯篇（长文建议收藏）](https://juejin.cn/post/6844903987112574983)
+* [解密国内BAT等大厂前端技术体系-携程篇（长文建议收藏）](https://juejin.cn/post/6844904007131987976)
+* [解密国内BAT等大厂前端技术体系-美团点评之上篇（长文建议收藏）](https://juejin.cn/post/6844904014522351624)
+* [解密国内BAT等大厂前端技术体系-美团点评之下篇（长文建议收藏）](https://juejin.cn/post/6844904019706511373)
+* [解密国内BAT等大厂前端技术体系-完结篇](https://juejin.cn/post/6844904031798689806)
 
 ## 技术团队
 
