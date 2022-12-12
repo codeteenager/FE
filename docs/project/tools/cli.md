@@ -25,5 +25,26 @@
 ## Yeoman
 Yeoman的slogan是“THE WEB'S SCAFFOLDING TOOL FOR MODERN WEBAPPS”——面向webapp的脚手架工具。Yeoman不能直接创建项目文件，它提供了一套完整的脚手架开发者API，使用这些API可以定制符合自己业务需求的任意脚手架方案。换句话说，Yeoman不封装任何方案，它是完全开放、高度可扩展的。
 
+## 脚手架的工作原理
+大部分脚手架工具都很简单，在启动脚手架之后，会自动询问一些预设的问题，然后根据开发者回答的结果结合模板文件生成项目的结构。脚手架工具就是一个Node cli应用，那我们可以创建一个cli应用。
+```shell
+mkdir test-cli && cd test-cli
+npm init
+```
+创建完项目后可以新建一个cli.js，在文件中先声明一个文件头。
+```js
+//cli.js
+#! /usr/bin/env node
+//Node cli应用入口必须要有这样的文件头
+```
+
+脚手架的工作过程分为两点：1. 通过命令行交互询问用户问题，2. 根据用户回答的结果生成文件
+
+命令行交互询问使用[inquirer](https://github.com/SBoudrias/Inquirer.js)库来实现。
+```shell
+npm install inquirer --save
+```
+生成文件可以使用[ejs](https://github.com/mde/ejs)模板引擎来实现
+
 
 
