@@ -30,6 +30,17 @@ https://gitmind.cn/app/docs/m1foeg1o
 ## 常见的loader
 * style-loader：将css-loader转换后的结果，通过style标签的方式追加到页面中
 * css-loader：将css文件转换为js模块
+* file-loader：把文件输出到一个文件夹中，在代码中通过相对URL去引用输出文件
+* url-loader：和file-loader类似，但是能在文件很小的情况下以base64的方式把文件内容注入到代码中去
+* source-map-loader：加载额外的source Map文件，以方便断点调试
+* image-loader：加载并且压缩图片文件
+* babel-loader：把ES6转换成ES5
+* eslint-loader：通过ESLint检查JavaScript代码
+
+注意：在Webpack中，loader的执行顺序是从右向左执行的，因为Webpack选择了compose这样的函数式编程方式，这种方式的表达式执行时从右向左的。
+
+
+
 
 ## 自定义loader
 
@@ -41,6 +52,10 @@ https://gitmind.cn/app/docs/m1foeg1o
 * mini-css-extract-plugin：将 css 提取到单独的文件中，为每个包含 css 的 js 文件创建一个 css 文件，并且支持 css 和 SourceMaps 的按需加载。 
 * webpack-dev-server：提供了一个基本的 web server，并且具有 livereloading(实时重新加载) 功能
 * optimize-css-assets-webpack-plugin：压缩 css 文件
+* define-plugin：定义环境变量
+* uglifyjs-webpack-plugin：通过UglifyES压缩ES6代码
+* webpack-parallel-uglify-plugin：多核压缩，提高压缩速度
+* webpack-bundle-analyzer：可视化webpack输出文件的体积
 
 ## 常见开发配置
 

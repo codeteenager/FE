@@ -3,4 +3,4 @@
 
 1. 工作流管理工具，比如Grunt、Gulp。
 2. 构建工具，比如webpack、rollup。
-3. 整体解决方案，比如FIS、WeFlow。
+3. 整体解决方案，比如[FIS](http://fis.baidu.com/)、[WeFlow](https://feflowjs.com/zh/)。

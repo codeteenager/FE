@@ -208,12 +208,24 @@ module.exports = {
                     collapsed: false,
                     items: [
                         {
+                            text: "介绍",
+                            link: "/project/deploy/index",
+                        },
+                        {
                             text: "npm仓库",
                             link: "/project/deploy/registry",
                         },
                         {
+                            text: "发布",
+                            link: "/project/deploy/publish",
+                        },
+                        {
                             text: "灰度发布",
                             link: "/project/deploy/grey-publish",
+                        },
+                        {
+                            text: "发布回滚",
+                            link: "/project/deploy/publish-rollback",
                         },
                     ],
                 },
