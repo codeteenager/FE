@@ -54,10 +54,6 @@ module.exports = {
                             link: "/web/foundation/ecmascript",
                         },
                         {
-                            text: "浏览器工作原理",
-                            link: "/web/foundation/chrome",
-                        },
-                        {
                             text: "跨域",
                             link: "/web/foundation/cross-domain",
                         }
@@ -88,6 +84,21 @@ module.exports = {
                             text: "apply&call&bind原理介绍",
                             link: "/web/js/call-apply-bind"
                         }
+                    ]
+                },
+                {
+                    text: "浏览器",
+                    collapsible: true,
+                    collapsed: false,
+                    items: [
+                        {
+                            text: "浏览器工作原理",
+                            link: "/web/browser/chrome",
+                        },
+                        {
+                            text: "宏任务 & 微任务的运行机制",
+                            link: "/web/browser/task",
+                        },
                     ]
                 },
                 {
