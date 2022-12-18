@@ -16,6 +16,75 @@
 
 ![](/framework/2.png)
 
+## 组件间通信方式
+大多数场景下的组件都并不是独立存在的，而是相互协作共同构成了一个复杂的业务功能。在 Vue 中为 不同的组件关系提供了不同的通信规则。
+
+常见组件间通信方式分为三类：
+* 父组件给子组件传值
+* 子组件给父组件传值
+* 不相关组件之间传值
+
+![](/framework/6.png)
+
+### [父组件给子组件传值](https://cn.vuejs.org/v2/guide/components.html#%E9%80%9A%E8%BF%87-Prop-%E5%90%91%E5%AD%90%E7%BB%84%E4%BB%B6%E4%BC%A0%E9%80%92%E6%95%B0%E6%8D%AE)
+子组件中通过props接收数据，父组件中给子组件通过相应属性传值。
+```html
+<blog-post title="My journey with Vue"></blog-post>
+```
+```js
+Vue.component('blog-post', {
+    props: ['title'],
+    template: '<h3>{{ title }}</h3>'
+})
+```
+
+### [子组件给父组件传值 (Event Up)](https://cn.vuejs.org/v2/guide/components.html#%E7%9B%91%E5%90%AC%E5%AD%90%E7%BB%84%E4%BB%B6%E4%BA%8B%E4%BB%B6)
+在子组件中使用 $emit 发布一个自定义事件：
+```html
+<button v-on:click="$emit('enlargeText', 0.1)">
+Enlarge text
+</button>
+```
+在使用这个组件的时候，使用 v-on 监听这个自定义事件
+```js
+<blog-post v-on:enlargeText="hFontSize += $event"></blog-post>
+```
+
+### [不相关组件传值 Event Bus](https://v2.cn.vuejs.org/v2/guide/migration.html#dispatch-%E5%92%8C-broadcast-%E6%9B%BF%E6%8D%A2)
+我们可以使用一个非常简单的 Event Bus 来解决这个问题：
+```js
+//eventbus.js
+export default new Vue()
+```
+
+然后在需要通信的两端：
+使用 $on 订阅：
+```js
+// 没有参数
+bus.$on('自定义事件名称', () => {
+// 执行操作
+})
+// 有参数
+bus.$on('自定义事件名称', data => {
+// 执行操作
+})
+```
+使用 $emit 发布：
+```js
+// 没有自定义传参
+bus.$emit('自定义事件名称');
+// 有自定义传参
+bus.$emit('自定义事件名称', 数据);
+```
+
+除了上述常见的传值之外，还有其他常见的方式：
+* $root
+* $parent
+* $children
+* $refs
+  
+通过这些相关的属性获取父子组件，调用组件上对应的成员，实现组件间的通信。只是这些都是不被推荐的使用方式，只有当项目非常小，或者开发自定义组件时才会使用。如果是大型项目还是推荐使用vuex来管理状态。
+
 ## 核心概念
 核心概念共分为以下五个部分：
 * State：this.$store.state.xxx 取值
