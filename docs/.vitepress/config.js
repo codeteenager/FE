@@ -176,7 +176,7 @@ module.exports = {
                         {
                             text: "脚手架",
                             link: "/project/tools/cli",
-                        },
+                        }
                     ],
                 },
                 {
@@ -210,6 +210,10 @@ module.exports = {
                         {
                             text: "No-bundle",
                             link: "/project/build/nobundle",
+                        },
+                        {
+                            text: "服务端渲染",
+                            link: "/project/build/ssr",
                         },
                     ],
                 },
