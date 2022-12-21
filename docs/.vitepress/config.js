@@ -54,6 +54,10 @@ module.exports = {
                             link: "/web/foundation/ecmascript",
                         },
                         {
+                            text: "TypeScript",
+                            link: "/web/foundation/typescript",
+                        },
+                        {
                             text: "跨域",
                             link: "/web/foundation/cross-domain",
                         }
