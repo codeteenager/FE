@@ -95,5 +95,183 @@ function sum(a:number,b:number){
 * rootDir：设置源代码即TypeScript的文件夹目录
 * sourceMap：开启源代码映射，调试的时候可以调试TypeScript源代码
 * strict：严格模式，开启所有严格类型检查，要为每一个成员指定明确的类型，不允许不写类型而隐式推断为any这种情况
+* lib：编译过程所需要的标准库，标准库即内置对象所应用的声明文件，在代码中使用内置对象必须要引用对应的标准库，否则TypeScript找不到对应的类型，会报错
 
 当我们使用tsc编译某一个文件的时候，配置文件是不生效的，而当我们使用tsc编译整个项目的时候tsc才生效。
+
+## TypeScript原始类型
+* string，存放字符串，非严格模式下允许设置null
+* number，存放数字，包括Nan、Infinity，非严格模式下允许设置null
+* boolean，存放true或false，非严格模式下允许设置null
+* void，空值，一般是在函数没有返回值的时候，标记函数返回值类型，存放undefined，非严格模式下允许设置null
+* null，存放null
+* undefined，存放undefined
+* symbol，存放symbol类型的值 
+
+## TypeScript其他类型
+### Object类型
+TypeScript中的Object类型并不单指普通的对象类型，而是泛指所有的非原始类型，即对象、数组和函数。例如：
+```ts
+export {} //确保跟其他示例没有冲突
+
+// const foo: object = {};  
+// const foo: object = [];
+const foo: object = function(){};
+```
+如果限制类型为普通对象的话，可以使用对象字面量的语法去标记类型，并且赋值的对象结构与类型完全一致。
+```ts
+const obj: {foo:number} = {foo:123}
+```
+
+### 数组类型
+TypeScript创建数组有两种方式，一种是使用Array泛型
+```ts
+const arr1 : Array<number> = [1,2,3];
+```
+第二种是使用元素类型+方括号的形式
+```ts
+const arr2 : number[] = [1,2,3];
+```
+
+### 元组类型
+元组类型是一种特殊的数据结构，元组其实就是一个明确元素数量和元素类型的数组。各个元素类型可以不完全相同，在TypeScript中可以使用类似字面量的方式来定义。可以通过数组下标和解构的方式获取内容，在React的useState中就是返回元组的方式。
+```ts
+const tuple: [number,string] = [18,'test'];
+const age = tuple[0];
+```
+
+### 枚举类型
+枚举类型有两个特点，一个是给一组数值取上很好的名字，另一个是一个枚举中只存在一组固定的值，不会有超出范围的可能性。在其他语言中枚举是很常见的数据结构，而在JavaScript中没有。很多时候我们都是用对象模拟实现枚举。
+```js
+const PostStatus = {
+    Draft: 0,
+    Unpublished: 1,
+    Published: 2
+}
+```
+而在TypeScript中有专门的枚举类型，使用enum关键词来声明
+```ts
+enum PostStatus {
+    Draft = 0,
+    Unpublished = 1,
+    Published = 2
+}
+```
+枚举在编译后会生成双向的键值对对象。双向指的是可以通过键获取值，也可以通过值获取键。也就是说在代码中可以通过索引器的方式获取索引名称，如果我们确认代码中不会通过索引器的方式访问，那么建议使用常量枚举。在编译后枚举内容从代码中移除，而使用枚举的地方被具体数值替换。
+```ts
+const enum PostStatus {
+    Draft = 0,
+    Unpublished = 1,
+    Published = 2
+}
+```
+### 函数类型
+函数类型约束即对函数的输入输出进行类型限制，输入即参数，输出即返回值。JavaScript有两种函数定义的方式，分别是函数声明和函数表达式。
+```ts
+//函数声明
+function fun1(a:number,b?:number ,...rest:number[]): string{
+    return 'fun1';
+}
+
+//函数表达式
+const fun2:(a:number,b:number) => string = function(a:number,b:number): string{
+    return 'fun2';
+}
+```
+### 任意类型
+由于JavaScript自身是弱类型的关系，很多内置api本身就支持接收任意类型的参数，而TypeScript又是基于JavaScript基础之上的，所以我们难免要用一个变量去接收任意类型的数据。any就是用来接收任意类型数据的一种类型，它是不安全的尽量少用。
+```ts
+function stringify(value:any){
+    return JSON.stringify(value);
+}
+```
+
+## 隐式类型推断
+在TypeScript中，如果我们没有通过明确类型注解去标记一个变量的类型，那TypeScript会根据变量的使用情况去推断这个变量的类型，这样的特性称为隐式类型推断。如果它无法推断该变量的类型，则会标记成any。虽然有隐式类型推断，但还是建议给每个变量添加明确的类型。
+
+## 类型断言
+类型断言有两种，一种是as关键词，另一种的方式是在前面添加<>方式断言
+```ts
+const num1 = res as number;
+const num2 = <number>res;
+```
+## 接口
+在TypeScript中接口最直观的体现就是约定一个对象当中具体有哪些成员，以及成员的类型是什么样的。
+```ts
+interface Post {
+    title: string
+    content: string
+}
+
+function printPost(post:Post){
+    console.log(post.title);
+    console.log(post.content);
+}
+```
+在接口成员后面添加?，表示接口成员可有可无。在接口成员前添加readonly表示只读成员不可修改。
+```ts
+interface Post {
+    title: string
+    content: string
+    subtitle?: string
+    readonly summary: string
+}
+```
+当我们定义接口的时候不知道具体有哪些成员，这时候无法定义具体的成员名称。而是使用`[属性名称:成员名类型]:string`作为动态属性。
+```ts
+interface Cache{
+    [prop:string]: string
+}
+const cache:Cache ={}
+cache.foo = "value1"
+cache.bar = "value2"
+```
+
+## 类
+在TypeScript中，我们除了可以使用ECMAScript的类的相关功能，还添加了一些额外的功能和用法，例如类成员的访问修饰符、抽象类等概念。
+```ts
+class Person{
+    public name: string;
+    private age: number;
+    protected gender: boolean;
+
+    constructor(name:string,age:number){
+        this.name = name;
+        this.age = age;
+        this.gender = true;
+    }
+
+    sayHi(msg:string): void{
+        console.log(`I am ${this.name}，${msg}`);
+    }
+}
+
+class Student extends Person{
+    constructor(name: string,age:number){
+        super(name,age)
+        console.log(this.gender);
+    }
+}
+
+const tom = new Person('tom',18);
+console.log(tom.name);
+```
+类的访问修饰符可以使用public、private、protected，它的作用是控制类成员的可访问级别。默认为public，private不能在声明它的类的外部访问，public可以在类的外部访问，protected成员可以在派生类中访问。
+
+除了类的访问修饰符，还可以使用readonly只读属性来限制属性的修改。
+
+其余的像抽象类、泛型等等的使用可以参考TypeScript中文网来学习使用。
+
+## 类型声明
+在实际开发过程中，我们难免会用到第三方的Npm模块，而这些npm模块并不一定都是由TypeScript编写的，所以它提供的成员不会有强类型的体验。
+
+例如我们使用lodash缺少类型声明没有任何的提示，那么我们可以写上单独类型声明。有了声明之后就会发现使用函数就有类型限制了。这种用法存在的原因就是为了兼容一些JS模块。
+```ts
+import { camelCase } from 'lodash'
+
+declare function camelCase(input:string): string
+
+const res = camelCase('hello typed')
+```
+
+由于TypeScript社区很强大，现在很多JS模块提供了类型声明模块库。例如lodash对应的@types/lodash，这些模块中都是.d.ts文件，这种文件就是TypeScript专门做类型声明的文件。
