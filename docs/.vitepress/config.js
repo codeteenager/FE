@@ -42,6 +42,10 @@ module.exports = {
                             link: "/web/foundation/index",
                         },
                         {
+                            text: "前端工程师原型",
+                            link: "/web/foundation/engineer",
+                        },
+                        {
                             text: "函数式编程",
                             link: "/web/foundation/functional",
                         },
