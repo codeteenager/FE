@@ -144,6 +144,10 @@ module.exports = {
                         {
                             text: "Nuxt",
                             link: "/framework/nuxt.md",
+                        },
+                        {
+                            text: "vue-loader",
+                            link: "/framework/vue-loader.md",
                         }
                     ],
                 }
@@ -211,6 +215,10 @@ module.exports = {
                     collapsible: true,
                     collapsed: false,
                     items: [
+                        {
+                            text: "自动化构建",
+                            link: "/project/build/automation",
+                        },
                         {
                             text: "增量更新",
                             link: "/project/build/update",
