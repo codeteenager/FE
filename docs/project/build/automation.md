@@ -30,3 +30,160 @@ Npm Scripts能做一些简单的自动化构建任务，但是对于一些复杂
 [FIS](http://fis.baidu.com/)是百度前端团队推出的构建系统，最早是在其内部使用，后来开源过后在国内快速流行，相对于前两个构建系统这种微内核的特点，FIS更像是一种捆绑套餐，它把我们在项目中的需求尽可能集成在内部，例如在FIS中很容易的处理资源加载、模块化开发、代码部署甚至是性能优化，正是因为这种大而全，在国内很快就流行开。
 
 总体来说，如果你是初学者的话FIS更适合你，如果你要求灵活多变的话Gulp、Grunt应该是更好的选择。
+
+## Glup基本使用
+Glup作为当下最流行的构建系统，其核心特点就是高效、易用，使用Gulp非常简单，在项目中安装Glup的依赖，然后在项目根目录下添加glupfile.js文件，用于去编写Gulp构建执行的自动任务，完成之后就可以通过gulp的cli去运行这些构建任务。
+
+```js
+//gulpfile.js
+//gulp入口文件
+exports.foo = done=>{
+    console.log('foo task working');
+    done(); //标记任务完成
+}
+
+exports.default = done=>{
+    console.log('default task working');
+    done();
+}
+
+const gulp = require('gulp');
+gulp.task('bar',done=>{
+    console.log('bar working');
+    done();
+});
+```
+
+gulp任务可以通过export导出一个函数，然后使用命令`gulp foo`来调用。也可以使用default默认导出的方式，这种方式不需要指定任务名直接执行`gulp`命令即可。在gulp4.0之前可以通过`gulp.task`函数来定义任务，现如今仍然保留了该方式，但是不推荐使用。
+
+## 组合任务
+Gulp 提供了两个强大的组合方法： series() 和 parallel()，series用来组合串行任务，parallel用来组合并行任务。
+```js
+const {series, parallel} = require('gulp');
+
+const task1 = done =>{
+    setTimeout(()=>{
+        console.log('task1 working~');
+        done()
+    },1000)
+}
+
+const task2 = done =>{
+    setTimeout(()=>{
+        console.log('task2 working~');
+        done()
+    },1000)
+}
+
+const task3 = done =>{
+    setTimeout(()=>{
+        console.log('task3 working~');
+        done()
+    },1000)
+}
+
+exports.foo = series(task1,task2,task3);
+exports.bar = parallel(task1,task2,task3);
+```
+并行任务或者是串行任务在实际创建工作流中是很有用的，例如编译js和编译css他们是互不干扰的，这两个就可以采用并行的方式去执行，这样就能提高效率。再例如部署，部署前要先执行编译任务，这种我们就需要采用串行依次执行。
+
+## 异步任务
+Gulp中的任务都是异步任务，也就是在js中的异步函数，我们都知道调用异步函数是没有办法明确异步函数是否完成了，都是在函数内部，通过回调或者事件的方式去通知外部该函数执行完成了。在异步任务中也同样存在通知gulp异步任务完成这个问题，针对这个问题，gulp提供了几种方式。
+
+### 回调函数
+该回调函数与node中的回调函数一样，都是错误优先的回调函数，当我们想在任务处理过程中报出错误，阻止剩下任务执行的时候，通过给回调函数第一个参数指定一个错误对象即可。
+```js
+exports.callback = done=>{
+    console.log('callback task-');
+    done();
+}
+exports.callback_error = done=>{
+    console.log('callback task-');
+    done(new Error('task failed!'));
+}
+```
+
+### Promise
+Promise是相对回调函数比较好的方案，它解决了回调函数嵌套过深的问题。gulp中支持promise的方式，在任务执行函数中return一个Promise对象，一旦返回的Promise resolve了，表示任务结束了。resolve我们可以不返回值，gulp会忽略这个值。当我们reject后，它会阻止后续任务的执行。
+```js
+exports.promise = ()=>{
+    console.log('promise task-');
+    return Promise.resolve();
+}
+exports.promise_error = ()=>{
+    console.log('promise task-');
+    return Promise.reject(new Error('task failed!'));
+}
+```
+### async/await
+async/await是promise语法糖，更容易理解。
+```js
+const timeout = time =>{
+    return new Promise(resolve =>{
+        setTimeout(resolve,time)
+    })
+}
+
+exports.async = async ()=>{
+    await timeout(1000)
+    console.log('async task-');
+}
+```
+
+### stream
+因为我们使用gulp大多都处理文件，所以stream更多的使用到。它结束的时机是stream end的时候
+```js
+const fs = require('fs');
+
+exports.stream = ()=>{
+    const readStream = fs.createReadStream('package.json');
+    const writeStream = fs.createWriteStream('temp.txt');
+    readStream.pipe(writeStream);
+    return readStream;
+}
+```
+
+## Gulp构建过程核心工作原理
+构建过程大都是将文件读出来做一些转换，最后写入另外的位置。例如压缩文件，没有构建工具的话我们是将代码复制到压缩工具中，压缩完成后复制到对应的文件。通过代码的处理也是类似的，通过Node文件流api去做处理。例如：
+```js
+const fs = require('fs');
+const {Transform} = require('stream');
+
+exports.default = ()=>{
+    //文件读取流
+    const read = fs.createReadStream('normalize.css')
+    //文件写入流
+    const write = fs.createWriteStream('normalize.min.css')
+    //文件转换流
+    const transform = new Transform({
+        transform:(chunk,encoding,callback)=>{
+            //核心转换过程实现
+            //chunk => 读取流中读取到的内容(BUffer)
+            const input = chunk.toString();
+            const output = input.replace(/\$+/g,'').replace(/\/\*.+?\*\//g,'');
+            callback(null,output);
+        }
+    });
+    //把读取出来的文件流导入写入文件流
+    read
+        .pipe(transform)  //转换
+        .pipe(write);  //写入
+    return read;
+}
+```
+这就是gulp核心构建任务的工作过程，这个过程有三个核心概念，分别是读取流，转换流和写入流，读取流将需要转换的文件读取出来，经过转换流的转换逻辑转换成我们想要的结果，再通过写入流写入到指定的位置。这样的过程就完成了日常构建过程中所需要的工作。Gulp官方的定义就是The streaming build system，基于流的构建系统。
+
+## Gulp文件操作API
+Gulp提供了专门读取流和写入流的API，相比于底层Node的api，Gulp的api更强大更易于使用，至于负责文件加工的转换流，绝大多数情况下都是通过插件来提供的。这样的话我们通过gulp创建任务构建时的流程就是通过src方法去创建一个读取流，然后借助插件的转换流实现加工，最后通过gulp的dest方法创建写入流，写入到目标文件。例如：
+```js
+const { src, dest} = require('gulp')
+const cleanCss = require('gulp-clean-css')
+const rename = require('gulp-rename')
+
+exports.default = ()=>{
+    return src('src/*.css')
+        .pipe(cleanCss())
+        .pipe(rename({extname: '.min.css'}))
+        .pipe(dest('dist'))
+}
+```

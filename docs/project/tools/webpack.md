@@ -27,6 +27,43 @@ https://gitmind.cn/app/docs/m1foeg1o
 4. 创建webpack配置文件
 5. 配置package.json的build命令
 6. 执行npm run build 打包
+
+## Webpack工作模式
+Webpack 4 新增了一个工作模式的用法，这种用法大大简化了 Webpack 配置的复杂程度。你可以把它理解为针对不同环境的几组预设配置：
+* production 模式下，启动内置优化插件，自动优化打包结果，打包速度偏慢；
+* development 模式下，自动优化打包速度，添加一些调试过程中的辅助插件；
+* none 模式下，运行最原始的打包，不做任何额外处理。
+
+针对工作模式的选项，如果你没有配置一个明确的值，打包过程中命令行终端会打印一个对应的配置警告。在这种情况下 Webpack 将默认使用 production 模式去工作。
+
+production 模式下 Webpack 内部会自动启动一些优化插件，例如，自动压缩打包后的代码。这对实际生产环境是非常友好的，但是打包的结果就无法阅读了。
+
+修改 Webpack 工作模式的方式有两种：
+
+* 通过 CLI --mode 参数传入；
+* 通过配置文件设置 mode 属性。
+
+上述三种 Webpack 工作模式的详细差异我们不再赘述了，你可以在官方文档中查看：[https://webpack.js.org/configuration/mode/](https://webpack.js.org/configuration/mode/)
+  
+## 打包结果运行原理
+为了更好的理解打包后的代码，我们先将 Webpack 工作模式设置为 none，这样 Webpack 就会按照最原始的状态进行打包，所得到的结果更容易理解和阅读。 
+
+按照 none 模式打包完成后，我们打开最终生成的 bundle.js 文件，如下图所示：
+![](/project/55.png)
+
+我们可以先把代码全部折叠起来，以便于了解整体的结构
+![](/project/56.png)
+整体生成的代码其实就是一个立即执行函数，这个函数是 Webpack 工作入口（webpackBootstrap），它接收一个 modules 参数，调用时传入了一个数组。
+
+展开这个数组，里面的元素均是参数列表相同的函数。这里的函数对应的就是我们源代码中的模块，也就是说每个模块最终被包裹到了这样一个函数中，从而实现模块私有作用域，如下图所示：
+![](/project/57.png) 
+我们再来展开 Webpack 工作入口函数，如下图所示：
+![](/project/58.png) 
+这个函数内部并不复杂，而且注释也很清晰，最开始定义了一个 installedModules 对象用于存放或者缓存加载过的模块。紧接着定义了一个 require 函数，顾名思义，这个函数是用来加载模块的。再往后就是在 require 函数上挂载了一些其他的数据和工具函数，这些暂时不用关心。
+
+这个函数执行到最后调用了 require 函数，传入的模块 id 为 0，开始加载模块。模块 id 实际上就是模块数组的元素下标，也就是说这里开始加载源代码中所谓的入口模块，如下图所示：
+
+ 
 ## 常见的loader
 * style-loader：将css-loader转换后的结果，通过style标签的方式追加到页面中
 * css-loader：将css文件转换为js模块
@@ -278,7 +315,7 @@ resolve: {
 webpack打包体积优化有11种常用优化手段
 
 #### 构建体积分析
-npm run build 构建，会默认打开： http://127.0.0.1:8888/，可以看到各个包的体积,分析项目各模块的大小，可以按需优化。
+npm run build 构建，会默认打开： `http://127.0.0.1:8888/`，可以看到各个包的体积,分析项目各模块的大小，可以按需优化。
 
 ```js
 npm install webpack-bundle-analyzer -D
