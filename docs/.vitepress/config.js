@@ -148,6 +148,14 @@ module.exports = {
                         {
                             text: "vue-loader",
                             link: "/framework/vue-loader.md",
+                        },
+                        {
+                            text: "vue响应式原理",
+                            link: "/framework/vue-reactivity.md",
+                        },
+                        {
+                            text: "vue虚拟DOM",
+                            link: "/framework/vue-vdom.md",
                         }
                     ],
                 }
