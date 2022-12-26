@@ -63,18 +63,130 @@ production 模式下 Webpack 内部会自动启动一些优化插件，例如，
 
 这个函数执行到最后调用了 require 函数，传入的模块 id 为 0，开始加载模块。模块 id 实际上就是模块数组的元素下标，也就是说这里开始加载源代码中所谓的入口模块。
 
- 
+## Webpack资源模块加载
+Webpack 想要实现的是整个前端项目的模块化，项目中的各种资源（包括 CSS 文件、图片等）都应该属于需要被管理的模块。换句话说， Webpack 不仅是 JavaScript 模块打包工具，还是整个前端项目（前端工程）的模块打包工具。也就是说，我们可以通过 Webpack 去管理前端项目中任意类型的资源文件。
+
+首先，我们尝试通过 Webpack 打包项目中的一个 CSS 文件，将 Webpack 配置中的入口文件路径指定为 main.css 的文件路径，让 Webpack 直接打包 CSS 资源文件，具体配置如下所示：
+```js
+module.exports = {
+  // 样式文件路径
+  entry: './src/main.css',
+  output: {
+    filename: 'bundle.js'
+  }
+}
+```
+配置完成过后回到命令行终端运行 Webpack 打包命令，此时你会发现命令行报出了一个模块解析错误，如下所示：
+![](/project/59.png)
+错误信息大体的意思是说，在解析模块过程中遇到了非法字符，而且错误出现的位置就是在我们的 CSS 文件中。
+
+出现这个错误的原因是因为 Webpack 内部默认只能够处理 JS 模块代码，也就是说在打包过程中，它默认把所有遇到的文件都当作 JavaScript 代码进行解析，但是此处我们让 Webpack 处理的是 CSS 代码，而 CSS 代码是不符合 JavaScript 语法的，所以自然会报出模块解析错误。
+
+这里有一个非常重要的提示：You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. （我们需要用适当的加载器来处理这种文件类型，而当前并没有配置一个可以用来处理此文件的加载器）。
+
+根据这个错误说明，我们发现 Webpack 是用 Loader（加载器）来处理每个模块的，而内部默认的 Loader 只能处理 JS 模块，如果需要加载其他类型的模块就需要配置不同的 Loader。
+![](/project/60.png)
+
+解决上面的问题需要的是一个可以加载 CSS 模块的 Loader，最常用到的是 css-loader。我们需要通过 npm 先去安装这个 Loader，然后在配置文件中添加对应的配置，具体操作和配置如下所示：
+```shell
+$ npm install css-loader --save-dev 
+# or yarn add css-loader --dev
+```
+```js
+// ./webpack.config.js
+module.exports = {
+  entry: './src/main.css',
+  output: {
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/, // 根据打包过程中所遇到文件路径匹配是否使用这个 loader
+        use: 'css-loader' // 指定具体的 loader
+      }
+    ]
+  }
+}
+```
+
+在配置对象的 module 属性中添加一个 rules 数组。这个数组就是我们针对资源模块的加载规则配置，其中的每个规则对象都需要设置两个属性：
+
+* 首先是 test 属性，它是一个正则表达式，用来匹配打包过程中所遇到文件路径，这里我们是以 .css 结尾；
+* 然后是 use 属性，它用来指定匹配到的文件需要使用的 loader，这里用到的是 css-loader。
+
+配置完成过后，我们回到命令行终端重新运行打包命令，打包过程就不会再出现错误了，因为这时 CSS 文件会交给 css-loader 处理过后再由 Webpack 打包。
+
+尝试在页面中使用这里输出的 bundle.js 文件，会发现刚刚的这个 main.css 模块并没有工作。我们找到刚刚生成的 bundle.js 文件，因为这个文件是 Webpack 打包后的结果，所有的模块都应该在这个文件中出现。由于默认打包入口在 Webpack 输出的结果中就是第一个模块，所以我们只需要看第一个模块目前是什么样的，如下图所示：
+![](/project/61.png)
+
+仔细阅读这个文件，你会发现 css-loader 的作用是将 CSS 模块转换为一个 JS 模块，具体的实现方法是将我们的 CSS 代码 push 到一个数组中，这个数组是由 css-loader 内部的一个模块提供的，但是整个过程并没有任何地方使用到了这个数组。
+
+因此这里样式没有生效的原因是： css-loader 只会把 CSS 模块加载到 JS 代码中，而并不会使用这个模块。
+
+所以这里我们还需要在 css-loader 的基础上再使用一个 style-loader，把 css-loader 转换后的结果通过 style 标签追加到页面上。
+
+安装完 style-loader 之后，我们将配置文件中的 use 属性修改为一个数组，将 style-loader 也放进去。这里需要注意的是，一旦配置多个 Loader，执行顺序是从后往前执行的，所以这里一定要将 css-loader 放在最后，因为必须要 css-loader 先把 CSS 代码转换为 JS 模块，才可以正常打包，具体配置如下：
+```js
+// ./webpack.config.js
+module.exports = {
+  entry: './src/main.css',
+  output: {
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        // 对同一个模块使用多个 loader，注意顺序
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      }
+    ]
+  }
+}
+```
+配置完成之后，再次回到命令行重新打包，此时 bundle.js 文件中会额外多出两个模块。篇幅的关系，我们这里不再仔细解读。style-loader 的作用总结一句话就是，将 css-loader 中所加载到的所有样式模块，通过创建 style 标签的方式添加到页面上。
+
+## Webpack导入资源模块
+般 Webpack 打包的入口还是 JavaScript。因为从某种程度上来说，打包入口就是应用的运行入口，而目前前端应用中的业务是由 JS 驱动的，所以更合理的做法还是把 JS 文件作为打包的入口，然后在 JS 代码中通过 import 语句去加载 CSS 文件。
+![](/project/62.png)
+即便是通过 JS 代码去加载的 CSS 模块，css-loader 和 style-loader 仍然可以正常工作。因为 Webpack 在打包过程中会循环遍历每个模块，然后根据配置将每个遇到的模块交给对应的 Loader 去处理，最后再将处理完的结果打包到一起。
+
+其实 Webpack 不仅是建议我们在 JavaScript 中引入 CSS，还会建议我们在代码中引入当前业务所需要的任意资源文件。因为真正需要这个资源的并不是整个应用，而是你此时正在编写的代码。这就是 Webpack 的设计哲学。
+
+可能你乍一想好像不太容易理解，那你可以做一个假设：假设我们在开发页面上的某个局部功能时，需要用到一个样式模块和一个图片文件。如果你还是将这些资源文件单独引入到 HTML 中，然后再到 JS 中添加对应的逻辑代码。试想一下，如果后期这个局部功能不用了，你就需要同时删除 JS 中的代码和 HTML 中的资源文件引入，也就是同时需要维护这两条线。而如果你遵照 Webpack 的这种设计，所有资源的加载都是由 JS 代码控制，后期也就只需要维护 JS 代码这一条线了。
+
+所以说，通过 JavaScript 代码去引入资源文件，或者说是建立 JavaScript 和资源文件的依赖关系，具有明显的优势。因为 JavaScript 代码本身负责完成整个应用的业务功能，放大来说就是驱动了整个前端应用，而 JavaScript 代码在实现业务功能的过程中需要用到样式、图片等资源文件。如果建立这种依赖关系：
+
+* 一来逻辑上比较合理，因为 JS 确实需要这些资源文件配合才能实现整体功能；
+* 二来配合 Webpack 这类工具的打包，能确保在上线时，资源不会缺失，而且都是必要的。
+
 ## 常见的loader
-* style-loader：将css-loader转换后的结果，通过style标签的方式追加到页面中
-* css-loader：将css文件转换为js模块
-* file-loader：把文件输出到一个文件夹中，在代码中通过相对URL去引用输出文件
-* url-loader：和file-loader类似，但是能在文件很小的情况下以base64的方式把文件内容注入到代码中去
-* source-map-loader：加载额外的source Map文件，以方便断点调试
-* image-loader：加载并且压缩图片文件
-* babel-loader：把ES6转换成ES5
-* eslint-loader：通过ESLint检查JavaScript代码
+目前webpack社区提供了非常多的资源加载器，基本上你能想到的需求都有对应的loader。
+| 名称  |   描述   |   链接   |
+| ----- |  ------- |  ------ |
+| style-loader | 将css-loader转换后的结果，通过style标签的方式追加到页面中 |  https://webpack.js.org/loaders/style-loader |
+| css-loader | 将css文件转换为js模块  |  https://webpack.js.org/loaders/css-loader   | 
+| file-loader | 把文件输出到一个文件夹中，在代码中通过相对URL去引用输出文件 | https://webpack.js.org/loaders/file-loader   |
+| url-loader |和file-loader类似，但是能在文件很小的情况下以base64的方式把文件内容注入到代码中去 | https://webpack.js.org/loaders/url-loader    |
+| source-map-loader | 加载额外的source Map文件，以方便断点调试 |    |
+| image-loader | 加载并且压缩图片文件 |    |
+| babel-loader | 把ES6转换成ES5 |  https://webpack.js.org/loaders/babel-loader  |
+| eslint-loader | 通过ESLint检查JavaScript代码|  https://github.com/webpack-contrib/eslint-loader   |
+| sass-loader | | https://webpack.js.org/loaders/sass-loader  |
+| postcss-loader | |  https://webpack.js.org/loaders/postcss-loader |
+| vue-loader | |  https://github.com/vuejs/vue-loader   |
 
 注意：在Webpack中，loader的执行顺序是从右向左执行的，因为Webpack选择了compose这样的函数式编程方式，这种方式的表达式执行时从右向左的。
+
+## 文件资源加载器
+大多数加载器都类似于css-loader，都是将资源模块转换为JS代码的实现方式去工作，但是还有一些我们常用的资源文件，例如项目当中的图片或字体，这些文件无法通过JS的方式去表示，对于这类的资源文件，我们需要用到文件资源加载器，也就是file-loader。
+![](/project/63.png)
+
+webpack在打包时遇到了图片文件，然后根据配置文件的配置，找到文件加载器，文件加载器先是将导入的文件拷贝到输出的目录，然后将文件拷贝到输出目录后的路径作为当前模块的返回值返回，对于应用来说需要的资源就被发布出来了，通过模块的导出成员拿到资源的访问路径。
 
 
 
