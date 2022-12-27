@@ -174,6 +174,10 @@ module.exports = {
                             text: "模块化",
                             link: "/project/module",
                         },
+                        {
+                            text: "组件化",
+                            link: "/project/component",
+                        },
                     ],
                 },
                 {
@@ -196,6 +200,10 @@ module.exports = {
                         {
                             text: "脚手架",
                             link: "/project/tools/cli",
+                        },
+                        {
+                            text: "Vite",
+                            link: "/project/tools/vite",
                         }
                     ],
                 },

@@ -172,13 +172,13 @@ module.exports = {
 | css-loader | 将css文件转换为js模块  |  https://webpack.js.org/loaders/css-loader   | 
 | file-loader | 把文件输出到一个文件夹中，在代码中通过相对URL去引用输出文件 | https://webpack.js.org/loaders/file-loader   |
 | url-loader |和file-loader类似，但是能在文件很小的情况下以base64的方式把文件内容注入到代码中去 | https://webpack.js.org/loaders/url-loader    |
-| source-map-loader | 加载额外的source Map文件，以方便断点调试 |    |
-| image-loader | 加载并且压缩图片文件 |    |
+| source-map-loader | 加载额外的source Map文件，以方便断点调试 |  https://webpack.docschina.org/loaders/source-map-loader/  |
+| image-loader | 加载并且压缩图片文件 |  https://github.com/tcoopman/image-webpack-loader  |
 | babel-loader | 把ES6转换成ES5 |  https://webpack.js.org/loaders/babel-loader  |
 | eslint-loader | 通过ESLint检查JavaScript代码|  https://github.com/webpack-contrib/eslint-loader   |
-| sass-loader | | https://webpack.js.org/loaders/sass-loader  |
-| postcss-loader | |  https://webpack.js.org/loaders/postcss-loader |
-| vue-loader | |  https://github.com/vuejs/vue-loader   |
+| sass-loader | 加载 Sass/SCSS 文件并将其编译为 CSS | https://webpack.js.org/loaders/sass-loader  |
+| postcss-loader |处理 CSS 的加载器PostCSS |  https://webpack.js.org/loaders/postcss-loader |
+| vue-loader | Vue 单文件组件的 webpack 加载器 |  https://github.com/vuejs/vue-loader   |
 
 注意：在Webpack中，loader的执行顺序是从右向左执行的，因为Webpack选择了compose这样的函数式编程方式，这种方式的表达式执行时从右向左的。
 
