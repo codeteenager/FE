@@ -156,6 +156,10 @@ module.exports = {
                         {
                             text: "vue虚拟DOM",
                             link: "/framework/vue-vdom.md",
+                        },
+                        {
+                            text: "Vue SSR",
+                            link: "/framework/vue-ssr.md",
                         }
                     ],
                 }
@@ -204,6 +208,10 @@ module.exports = {
                         {
                             text: "Vite",
                             link: "/project/tools/vite",
+                        },
+                        {
+                            text: "Gridsome",
+                            link: "/project/tools/gridsome",
                         }
                     ],
                 },
@@ -292,7 +300,23 @@ module.exports = {
                         {
                             text: "中后台解决方案",
                             link: "/project/solution/admin",
-                        }
+                        },
+                        {
+                            text: "文件上传",
+                            link: "/project/solution/file-upload",
+                        },
+                        {
+                            text: "水印",
+                            link: "/project/solution/watermark",
+                        },
+                        {
+                            text: "数据统计",
+                            link: "/project/solution/statistics",
+                        },
+                        {
+                            text: "在线简历",
+                            link: "/project/solution/resume-online",
+                        },
                     ],
                 },
             ]

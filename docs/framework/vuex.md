@@ -450,3 +450,69 @@ const store = new Vuex.Store({
 
 #### 开启命名空间
 随着项目的扩大，我们有很多的状态需要管理，这里建议对所有的模块开始命名空间namespaced:true，嵌套模块不要太深，尽量扁平化，灵活应用createNamespacedHelpers。
+
+## Vuex 模拟实现
+### 实现思路
+* 实现 install 方法：Vuex 是 Vue 的一个插件，所以和模拟 VueRouter 类似，先实现 Vue 插件约定的 install 方法
+* 实现 Store 类：实现构造函数，接收 options，state 的响应化处理，getter 的实现，commit、dispatch 方法
+
+### install方法
+```js
+let _Vue = null
+function install (Vue) {
+    _Vue = Vue
+    _Vue.mixin({
+        beforeCreate () {
+            if (this.$options.store) {
+                Vue.prototype.$store = this.$options.store
+            }
+        }
+    })
+}
+
+```
+### 实现store类
+```js
+class Store {
+    constructor (options) {
+        const {
+            state = {},
+            getters = {},
+            mutations = {},
+            actions = {}
+        } = options
+        this.state = _Vue.observable(state)
+        // 此处不直接 this.getters = getters，是因为下面的代码中要方法 getters 中的 key
+        // 如果这么写的话，会导致 this.getters 和 getters 指向同一个对象
+        // 当访问 getters 的 key 的时候，实际上就是访问 this.getters 的 key 会触发 key 属性的 getter
+        // 会产生死递归
+        this.getters = Object.create(null)
+        Object.keys(getters).forEach(key => {
+            Object.defineProperty(this.getters, key, {
+                get: () => getters[key](this.state)
+            })
+        })
+        this.mutations = mutations
+        this.actions = actions
+    }
+    commit (type, payload) {
+        this.mutations[type](this.state, payload)
+    }
+    dispatch (type, payload) {
+        this.actions[type](this, payload)
+    }
+}
+// 导出模块
+export default {
+    Store,
+    install
+}
+
+```
+### 使用自己实现的 Vuex
+src/store/index.js 中修改导入 Vuex 的路径，测试
+```js
+import Vuex from '../myvuex'
+// 注册插件
+Vue.use(Vuex
+```
