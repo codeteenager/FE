@@ -108,3 +108,232 @@ Secondary.args = {
 ```
 
 我们在这个项目中可以先开发组件，等组件开发完成后，我们就可以写stories来查看组件渲染的结果。
+
+## yarn workspaces
+workspaces是工作区的意思，我们先看一下Monorepo的工作结构
+```js
+|-package.json
+|_packages
+  |-button
+  | |_package.json
+  |-form
+  | |_package.json
+  |-input
+  | |_package.json
+  |_steps
+    |_package.json
+```
+最外层的文件夹中是脚手架，因为所有的包都有相似的行为，所以这里存放所有的包的开发依赖，比如babel、storybook以及测试工具jest等，packages目录下有很多包，每个包对应着一个或多个组件，不同的包可能有不同的运行依赖，每个包的package.json记录自己的依赖，常规情况下我们需要给每个包安装各自的依赖。两个包如果有相同的依赖则会重复下载，占用硬盘的情况。开启yarn workspaces之后可以让我们在根目录中使用yarn install给所有的包统一安装依赖，如果不同的包中引用相同的第三方包，这时只会下载一次，并把相同依赖提升到根目录下node_modules中减少重复。如果不同的包引用同一个包但是版本不同，这时候会把相同的包提升到根目录下，版本不同的会单独在包中下载。
+
+### 开启yarn的工作区
+在项目根目录的package.json中设置：private设置为true，这样根目录就不会发布出去，然后设置workspaces工作区的子目录，可以使用*指定packages下的任意包。
+```js
+{
+  "private":true,
+  "workspaces":[
+    "packages/*"
+  ]
+}
+```
+
+### yarn workspaces使用
+把工作区的开发依赖安装到根目录下的node_modules中，-D是开发依赖，-W是工作区指的是安装到工作区的根目录。
+```shell
+yarn add jest -D -W
+```
+
+我们可以给指定的包安装单独的依赖，通过yarn workspace 包名 add 第三方包名，注意包名指的是工作区下包的package.json的包名。
+```shell
+yarn workspace lg-button add lodash@4
+```
+
+如果我们的包中都有各自的依赖，可以使用yarn install安装所有包的依赖，不需要一个包一个包来安装，如果多个包有相同的依赖，会自动的将其提升到工作区下的node_modules中，防止重复下载。
+```shell
+yarn install
+```
+
+## Lerna
+当我们组件库开发完毕后，想要把所有组件提交到Github或npm上，这时我们可以使用Lerna，方便我们把项目中的组件统一发布。
+
+Lerna是babel自己维护自己的Monorepo而开源的项目，它是用来优化使用git和npm管理多包仓库的工作流工具，用于管理具有多个包的JavaScript项目，它可以一键把代码提交到git和npm仓库。Lerna也可以管理包的依赖，它可以选择使用npm还是yarn来管理包的依赖，它需要单独配置，如果使用yarn也可以开启yarn workspaces。一般我们会把Lerna和yarn workspaces结合使用，使用Lerna发布，使用yarn workspaces管理依赖。
+
+### Lerna使用
+全局安装
+```shell
+yarn global add lerna
+```
+初始化
+```shell
+lerna init
+```
+初始化后如果当前项目没有git管理的话，它会初始化git。在项目根目录创建lerna.json的配置文件，在package.json中添加开发依赖，初始化完毕我们就可以使用Lerna发布项目。
+```shell
+lerna publish
+```
+我们需要连接到git仓库，并登录npm，发布时就可以提交到git仓库并发布到npm上。
+
+## Vue组件的单元测试
+单元测试就是使用断言的方式对函数的输入、输出进行测试，根据输入判断输出和预测的输出是否相同。使用单元测试的目的是为了判断模块内部可能存在的错误，组件的单元测试指的是使用单元测试工具对组件的各种状态和行为进行测试，确保在组件发布之后在项目使用组件的过程中不会导致程序出现错误。
+
+### 组件单元测试的好处
+* 提供描述组件行为的文档
+* 节省手动测试的时间
+* 减少研发新特性时产生的bug
+* 改进设计
+* 促进重构
+
+### 安装依赖
+* Vue Test Utils：Vue官方提供的单元测试库
+* Jest
+* vue-jest
+* babel-jest
+
+```shell
+yarn add jest @vue/test-utils vue-jest babel-jest -D -W
+```
+
+### 配置测试脚本
+在package.json中配置单元测试的脚本
+```js
+//package.json
+{
+  "scripts":{
+    "test": "jest"
+  }
+}
+```
+
+Jest配置文件
+```js
+//jest.config.js
+module.exports = {
+  "testMatch": ["**/__tests__/**/*.[jt]s?(x)"]
+  "moduleFileExtensions":[
+    "js",
+    "json",
+    //告诉Jest处理`*.vue`文件
+    "vue"
+  ],
+  "transform":{
+    //用`vue-jest`处理`*.vue`文件
+    ".*\\.(vue)$":"vue-jest",
+    //用`babel-jest`处理js
+    ".*\\.(js)$":"babel-jest"
+  }
+}
+```
+Babel配置文件
+```js
+//babel.config.js
+module.exports = {
+  presets:[
+    [
+      '@babel/preset-env'
+    ]
+  ]
+}
+```
+如果提示找不到babel可以安装Babel桥接
+```shell
+yarn add babel-core@bridge -D -W
+```
+
+### Jest常用API
+全局函数 
+* describe(name,fn)   创建代码块，把相关测试组合在一起
+* test(name,fn)    测试方法
+* expect(value)    断言，一般测试函数或者方法返回值
+  
+匹配器
+* toBe(value)     判断值是否相等
+* toEqual(obj)    判断对象是否相等
+* toContain(value)  判断数组或者字符串中是否包含
+
+快照
+* toMatchSnapshot()
+
+### Vue Test Utils常用API
+mount()：创建一个包含被挂载和渲染的Vue组件的Wrapper。
+
+Wrapper：
+* vm        wrapper包裹的组件实例
+* props()   返回Vue实例选项中的props对象
+* html()    组件生成的HTML标签
+* find()    通过选择器返回匹配到的组件中的DOM元素
+* trigger() 触发DOM原生事件，自定义事件wrapper.vm.$emit()
+
+## Rollup
+在项目发布之前还需要打包处理，我们选择Rollup打包。Rollup是一个模块打包器，很多开源项目都采用Rollup打包，比如Vue、React等，Rollup支持Tree-shaking，可以静态分析代码中的import，然后排除未使用的代码，它打包的结果比Webpack要小，开发框架/组件库的时候使用Rollup更合适。
+
+### 安装依赖
+由于打包属于开发依赖，所以将其安装在工作区的根目录下。
+* Rollup
+* rollup-plugin-terser，对代码进行压缩
+* rollup-plugin-vue，将单文件组件编译成JS代码
+* vue-template-compiler
+
+### 配置rollup
+安装好rollup和相关插件后，配置rollup.config.js配置文件。
+```js
+import { terser } from 'rollup-plugin-terser'
+import vue from 'rollup-plugin-vue'
+module.exports = [
+  {
+    input: 'index.js',
+    output:[
+      {
+        file: 'dist/index.js',
+        format:'es'
+      }
+    ],
+    plugins:[
+      vue({
+        css:true,
+        compileTemplate:true
+      }),
+      terser()
+    ]
+  }
+]
+```
+
+## 设置环境变量
+通过使用cross-env来设置环境变量
+```shell
+yarn add cross-env -D -W
+```
+在scripts脚本中
+```js
+{
+  scripts:{
+    "build:prod": "cross-env NODE_ENV=production rollup -c",
+    "build:dev": "cross-env NODE_ENV=development rollup -c",
+  }
+}
+```
+## 清理
+清理做两件事，清理所有包中的node_modules和dist。清理node_modules使用lerna的clean命令即可。
+```shell
+lerna clean
+```
+清理dist使用rimraf，先安装rimraf，然后使用其删除指定文件夹
+```shell
+yarn add rimraf -D -W
+```
+```js
+{
+  "scripts":{
+    "del": "rimraf dist"
+  }
+}
+```
+每个包中都有del命令，但是我们不可能进入每个包去执行这个命令，因此使用yarn workspaces来执行所有包中的命令。
+```shell
+yarn workspaces run del
+```
+
+## 基于模板生成组件基本结构
+如果我要创建一个新的组件，由于每个组件都是相同的目录结构，所以我们可以把相同的部分提取出来作为一个模板，基于模板快速生成一个新的组件结构，这时候我们可以使用plop或者自定义模板下载到本地。
+
+## 发布
+发布之前先打包，然后登录npm，使用lerna publish来发布即可。
