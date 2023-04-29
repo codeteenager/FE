@@ -1,0 +1,1 @@
+import{_ as e,c as r,o as a,V as t}from"./chunks/framework.fc39353b.js";const d=JSON.parse('{"title":"技术博文","description":"","frontmatter":{},"headers":[],"relativePath":"web/other/blog.md","lastUpdated":1682529291000}'),l={name:"web/other/blog.md"},i=t("",4),n=[i];function o(h,s,c,f,p,b){return a(),r("div",null,n)}const m=e(l,[["render",o]]);export{d as __pageData,m as default};
